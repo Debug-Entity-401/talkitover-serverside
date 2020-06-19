@@ -2,7 +2,12 @@
 
 ////require
 const express = require('express'); const router = express.Router();
-//require the models and the middlewares...
+
+const users = require('./users');
+const oauthMiddleware = require('../middleware/oauth');
+const basicMiddleware = require('../middleware/BasicAuthentication');
+const bearerMiddleware = require('../middleware/bearer-auth');
+const aclMiddleware = require('../middleware/acl-middleware');
 
 ////////////////////
 
@@ -18,8 +23,8 @@ router.get('/profile', bearerMiddleware, profilePageHandler);
 router.get('/reviews', bearerMiddleware, reviewsHandler);
 router.get('/talkitoverposts', bearerMiddleware, postsHandler);
 router.post('/talkitoverposts', bearerMiddleware, addpostsHandler);
-router.put('/talkitoverposts/:id', bearearMiddleware, aclMiddleware, editpostsHandler);
-router.delete('/talkitoverposts/:id', bearearMiddleware, aclMiddleware, deletepostsHandler);
+router.put('/talkitoverposts/:id', bearerMiddleware, aclMiddleware, editpostsHandler);
+router.delete('/talkitoverposts/:id', bearerMiddleware, aclMiddleware, deletepostsHandler);
 router.get('/chatroom', bearerMiddleware, chatHandler);
 router.get('/addreview', bearerMiddleware, addReviewHandler);
 router.get('/otherprofile/:id', bearerMiddleware, otherUserProfileHandler);
@@ -45,26 +50,4 @@ function oauthHandler(req, res) {
   res.status(200).send(req.token);
 }
 
-async function signupHandler(req, res) {
-//depends on the users model
 
-//   try{
-//     const user = await users.save(req.body);
-//     const token = users.generateToken(user);
-//     res.cookie('token', req.token, {httpOnly: false});
-//     res.status(200).json({token});
-//   }
-//   catch(err){
-//     res.status(403).send(err.message);
-//   }
-}
-
-function signinHandler(req, res) {
-  //token and user are added to the request body from the basicauth middleware fuction
-  res.cookie('token', req.token, {httpOnly: false});
-  res.status(200).json({token: req.token, user: req.user});
-}
-
-function bearerHandler(req, res) {
-
-}
