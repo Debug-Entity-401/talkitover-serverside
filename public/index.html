@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+<<<<<<< HEAD
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -47,3 +48,31 @@
 		</div>
 	</body>
 </html>
+=======
+
+<head>
+    <title>User Oauth with Facebook</title>
+</head>
+
+<body>
+    <a id="login" href="">log in with FaceBook</a>
+</body>
+<script>
+    let url = 'https://developer19.us.auth0.com/oauth';
+
+    let codeOptions = {
+        client_id: 'bFHQwKNy1vmIfVwDd9UnR6qjzNYZO342',
+        redirect: 'http://localhost:3031/oauth',
+        scope: 'read:user',
+        state: 'oauthstate'
+    }
+    let queryString = Object.keys(codeOptions).map((key) => {
+        return `${key}=` + encodeURIComponent(codeOptions[key])
+    }).join('&');
+    let authURL = `${url}?${queryString}`;
+    let link = document.getElementById('login');
+    link.setAttribute('href', authURL);
+</script>
+
+</html>
+>>>>>>> 44583bd539bdc8f60d2137e099756da8c87980f6
