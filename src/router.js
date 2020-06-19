@@ -2,7 +2,7 @@
 
 ////require
 const express = require('express'); const router = express.Router();
-
+const postmodule=require('../model/schema/post-model');
 const users = require('./users');
 const bearerMiddleware = require('../middleware/bearer-auth');
 const aclMiddleware = require('../middleware/acl-middleware');
@@ -51,19 +51,37 @@ function reviewsHandler(req, res) {
 }
 
 function postsHandler(req, res) {
-
+  postmodule.read()
+    .then(data=>{
+      res.status(200).json(data);
+    });
 }
 
 function addpostsHandler(req, res) {
-    
+  let newpost=req.body;
+  let userid=req.user.id;
+  postmodule.create(newpost)
+    .then(data=>{
+      res.status(201).json(data);
+    });
 }
 
 function editpostsHandler(req, res) {
-
+  let newpost=req.body;
+  let id=req.params.id;
+  postmodule.update(id,newpost)
+    .then(data=>{
+      res.json(data);
+    });
 }
 
 function deletepostsHandler(req, res) {
-
+  let id=req.params.id;
+  let userid=req.user.id;
+  postmodule.delete(id)
+    .then(data=>{
+      res.send('post deleted');
+    });
 }
 
 function chatHandler(req, res) {
