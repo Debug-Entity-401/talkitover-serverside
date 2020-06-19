@@ -4,8 +4,6 @@
 const express = require('express'); const router = express.Router();
 
 const users = require('./users');
-const oauthMiddleware = require('../middleware/oauth');
-const basicMiddleware = require('../middleware/BasicAuthentication');
 const bearerMiddleware = require('../middleware/bearer-auth');
 const aclMiddleware = require('../middleware/acl-middleware');
 
@@ -13,9 +11,6 @@ const aclMiddleware = require('../middleware/acl-middleware');
 
 ////routes
 router.get('/register', registerHandler);
-router.get('oauth', oauthMiddleware, oauthHandler);
-router.post('/signup', signupHandler);
-router.post('/signin', basicMiddleware, signinHandler);
 router.get('/home', bearerMiddleware, homePageHandler);
 router.get('/profile', bearerMiddleware, profilePageHandler);
 // router.get('quotes', quotesHandler);
@@ -43,11 +38,49 @@ function registerHandler(req, res) {
   res.status(200).send('Sign-in Or Sign-up');
 }
 
-function oauthHandler(req, res) {
-  //add user token in cookies
-  // tokens are added to the request body from the oauth middleware fuction
-  res.cookie('token', req.token, {httpOnly: false});
-  res.status(200).send(req.token);
+function homePageHandler(req, res) {
+
 }
+
+function profilePageHandler(req, res) {
+
+}
+
+function reviewsHandler(req, res) {
+
+}
+
+function postsHandler(req, res) {
+
+}
+
+function addpostsHandler(req, res) {
+    
+}
+
+function editpostsHandler(req, res) {
+
+}
+
+function deletepostsHandler(req, res) {
+
+}
+
+function chatHandler(req, res) {
+
+}
+
+function addReviewHandler(req, res) {
+
+}
+
+function otherUserProfileHandler(req, res) {
+
+}
+
+function articlesHandler(req, res) {
+    
+}
+
 
 
