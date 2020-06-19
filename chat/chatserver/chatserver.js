@@ -1,36 +1,18 @@
 'use strict';
-const path = require('path');
-const express = require('express');
-const http = require('http');
-const app = express();
-const server = http.createServer(app);
-const socketio=require('socket.io');
-const io=socketio(server);
-const cors = require('cors');
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-const morgan = require('morgan');
-app.use(express.static('public'));
-app.use(cors());
-app.use(morgan('dev'));
-//when client connects
-io.on('connection',socket=>{
-  console.log('socket connection');
-  socket.emit('message','welcome to talkitover');
-  //it will emit expect cureent user
-  socket.broadcast.emit('message','a new user has joined the chat');
-  socket.on('disconnect',()=>{
-    //emmit to all clients expect the curent user
-    io.emit('message','a user has left the channel');
+
+const io = require('socket.io')(3000);
+
+// Load the things we'll be managing
+require('./slick')(io);
+
+// Core Demo -- global operations
+io.on('connection', (socket) => {
+  console.log('Welcome Global Connection', socket.id);
+  socket.on('error', (payload) => {
+    io.emit('error', payload);
   });
-  socket.on('chatmessage',(message)=>{
-    io.emit('message',message);
+
+  socket.on('action', (payload) => {
+    io.emit('action', payload);
   });
- 
 });
-module.exports = {
-  server: app,
-  start: (port) => {
-    server.listen(port, () => { console.log(`Listening on port ${port}`); });
-  },
-};
