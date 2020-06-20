@@ -20,6 +20,9 @@ class Model{
     return this.schema.findByIdAndDelete({_id: id});
 
   }
+  readById(id){
+    return this.schema.find({_id: id}); 
+  }
 }
 
 module.exports = Model;

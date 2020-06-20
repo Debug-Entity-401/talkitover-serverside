@@ -17,7 +17,6 @@ function getAll(req,res,next){
   article.read(status)
     .then(all =>{
       res.json(all);
-
     });
 }
 function addArticle(req,res,next){
@@ -46,5 +45,7 @@ function remove(req,res,next){
     });
   
 }
+
+
 
 module.exports = route;

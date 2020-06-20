@@ -1,9 +1,8 @@
 'use strict';
-
+require('dotenv').config();
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const userread = require('../model/user-model');
-require('dotenv').config();
 
 const SECRET = process.env.SECRET;
 
@@ -14,10 +13,11 @@ let role = {
   Administrators: ['READ', 'CREATE', 'UPDATE', 'DELETE'],
 };
 let users = {};
-users.saveHash = async function(record) {
 
+users.saveHash = async function(record) {
   let dataRexord = await userread.read(record.user_name);
-  if (!dataRexord[0]) {
+
+  if (!dataRexord || !dataRexord[0]) {
     record.password = await bcrypt.hash(record.password, 5);
 
     return record;
@@ -28,8 +28,12 @@ users.saveHash = async function(record) {
   }
 };
 users.authenticateBasic = async function(user, pass) {
+  console.log('user   ===',user);
+  console.log('passs    ',pass);
   const dataRexord = await userread.read(user);
-  let valid = await bcrypt.compare(pass, dataRexord[0].password);
+  console.log('dataa   ======',dataRexord);
+  let valid = await bcrypt.compare(pass, dataRexord.password);
+  console.log('valid   ',valid);
   return valid ? dataRexord : Promise.reject();
 };
 
