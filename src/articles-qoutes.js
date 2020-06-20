@@ -5,12 +5,14 @@ const express = require('express');
 const route = express.Router();
 const Model = require('../model/schema/general-model');
 const article = new Model(require('../model/schema/articlesschema'));
+const acl = require('../middleware/acl-middleware');
+const bearer = require('../middleware/bearer-auth');
 
 
-route.get('/getAll',getAll);
-route.put('/update/:id',updateArt);
-route.delete('/remove/:id',remove);
-route.post('/add',addArticle);
+route.get('/getAll',bearer,acl('READ'),getAll);
+route.put('/update/:id',bearer,acl('UPDATE'),updateArt);
+route.delete('/remove/:id',bearer,acl('DELETE'),remove);
+route.post('/add',bearer,acl('CREATE'),addArticle);
 
 function getAll(req,res,next){
   let status = req.query.status;
