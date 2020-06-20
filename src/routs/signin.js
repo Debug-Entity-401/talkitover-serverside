@@ -7,6 +7,7 @@ const bearer = require('../../middleware/bearer-auth');
 const router = express.Router();
 
 router.post('/signin', basicAuth, signinUser);
+// add new routs for articles
 router.post('/user/find/:idarticle',bearer,addArticleUser);
 router.get('/user',bearer,readOne);
 router.delete('/user/:idarticle',bearer,deleteArticles);
@@ -20,7 +21,7 @@ function signinUser(req, res) {
   });
   res.status(201).send(token);
 }
-
+// add functions for articles
 function addArticleUser(req,res){
   let id1 = req.user.user_name;
   let id2 = req.params.idarticle;

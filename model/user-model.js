@@ -8,10 +8,10 @@ class User {
     this.schama = userSchema;
   }
   async read(record) {
-    if (record) {
+    if (record) { //add populate for join
       let senc = await userSchema.findOne({ user_name: record }).populate('articles');
       return senc || null;
-    } else {
+    } else { //add populate for join
       return await userSchema.find({}).populate('articles');
     }
   }
@@ -19,6 +19,7 @@ class User {
     let newUser = new userSchema(record);
     return await newUser.save(record);
   }
+  //add two functions
   async articleByUser(id1,id2){
     return await userSchema.findOneAndUpdate({ user_name: id1 }, {$push: {articles: id2}}, { new: true });
   }
@@ -27,5 +28,5 @@ class User {
     return await userSchema.findOneAndUpdate({ user_name: id1}, { $pull: {articles: id2} },{new:true});
   }
 }
-
+///
 module.exports = new User();

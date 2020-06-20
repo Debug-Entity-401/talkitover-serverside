@@ -16,10 +16,8 @@ let users = {};
 
 users.saveHash = async function(record) {
   let dataRexord = await userread.read(record.user_name);
-
-  if (!dataRexord || !dataRexord[0]) {
+  if (!dataRexord || !dataRexord[0]) { //add !dataRexord to avoid null problem
     record.password = await bcrypt.hash(record.password, 5);
-
     return record;
   } else {
     console.error('it is already exists');
