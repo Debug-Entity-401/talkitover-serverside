@@ -4,6 +4,7 @@
 const express = require('express'); const router = express.Router();
 const postmodule=require('../model/schema/post-model');
 const users = require('./users');
+const usermodule=require('../model/user-model');
 const bearerMiddleware = require('../middleware/bearer-auth');
 const aclMiddleware = require('../middleware/acl-middleware');
 
@@ -18,8 +19,8 @@ router.get('/profile', bearerMiddleware, profilePageHandler);
 router.get('/reviews', bearerMiddleware, reviewsHandler);
 router.get('/talkitoverposts', bearerMiddleware, postsHandler);
 router.post('/talkitoverposts', bearerMiddleware, addpostsHandler);
-router.put('/talkitoverposts/:id', bearerMiddleware, aclMiddleware, editpostsHandler);
-router.delete('/talkitoverposts/:id', bearerMiddleware, aclMiddleware, deletepostsHandler);
+router.put('/talkitoverposts/:id', bearerMiddleware, editpostsHandler);
+router.delete('/talkitoverposts/:username/:idpost', bearerMiddleware, deletepostsHandler);
 router.get('/chatroom', bearerMiddleware, chatHandler);
 router.get('/addreview', bearerMiddleware, addReviewHandler);
 router.get('/otherprofile/:id', bearerMiddleware, otherUserProfileHandler);
@@ -76,8 +77,12 @@ function editpostsHandler(req, res) {
 }
 
 function deletepostsHandler(req, res) {
-  let id=req.params.id;
-  let userid=req.user.id;
+  let username=req.params.username;
+  usermodule.read(username)
+    .then(data=>{
+    if(data.role ==='Administrators')
+    });
+  
   postmodule.delete(id)
     .then(data=>{
       res.send('post deleted');
