@@ -16,10 +16,8 @@ let users = {};
 
 users.saveHash = async function(record) {
   let dataRexord = await userread.read(record.user_name);
-
-  if (!dataRexord || !dataRexord[0]) {
+  if (!dataRexord || !dataRexord[0]) { //add !dataRexord to avoid null problem
     record.password = await bcrypt.hash(record.password, 5);
-
     return record;
   } else {
     console.error('it is already exists');
@@ -28,12 +26,8 @@ users.saveHash = async function(record) {
   }
 };
 users.authenticateBasic = async function(user, pass) {
-  console.log('user   ===',user);
-  console.log('passs    ',pass);
   const dataRexord = await userread.read(user);
-  console.log('dataa   ======',dataRexord);
   let valid = await bcrypt.compare(pass, dataRexord.password);
-  console.log('valid   ',valid);
   return valid ? dataRexord : Promise.reject();
 };
 

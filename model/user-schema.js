@@ -8,16 +8,14 @@ const user = mongoose.Schema({
   phonNumber: { type: Number, required: true },
   country: { type: String },
   photo: { type: String },
-  articles: [{
+  articles: [{ //add for virtual join
     type: mongoose.Schema.Types.ObjectId,
     ref: 'articles',
   }],
   role: { type: String },
 },{
-  timestamps: true,
   toJSON: {
     virtuals: true,
-    
   },
 });
 

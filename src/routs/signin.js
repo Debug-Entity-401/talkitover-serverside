@@ -3,12 +3,14 @@
 const express = require('express');
 const basicAuth = require('../../middleware/BasicAuthentication');
 const model = require('../../model/user-model');
+const bearer = require('../../middleware/bearer-auth');
 const router = express.Router();
 
 router.post('/signin', basicAuth, signinUser);
-router.post('/user/find/:id1/:id2',addArticleUser);
-router.get('/user/:username',readOne);
-router.delete('/user/:username/:id',deleteArticle);
+// add new routs for articles
+router.post('/user/find/:idarticle',bearer,addArticleUser);
+router.get('/user',bearer,readOne);
+router.delete('/user/:idarticle',bearer,deleteArticles);
 
 function signinUser(req, res) {
   let token = req.token;
@@ -19,10 +21,10 @@ function signinUser(req, res) {
   });
   res.status(201).send(token);
 }
-
+// add functions for articles
 function addArticleUser(req,res){
-  let id1 = req.params.id1;
-  let id2 = req.params.id2;
+  let id1 = req.user.user_name;
+  let id2 = req.params.idarticle;
   model.articleByUser(id1,id2)
     .then(data =>{
       res.json(data);
@@ -30,24 +32,21 @@ function addArticleUser(req,res){
   
 }
 function readOne(req,res) {
-  let userName = req.params.username;
+  let userName = req.user.user_name;
   model.read(userName)
     .then(data =>{
       res.json(data);
     });  
 }
 
-function deleteArticle(req,res) {
-  let userName = req.params.username;
-  let id = req.params.id;
-  model.read(userName)
+function deleteArticles(req,res) {
+  let id1 = req.user.user_name;
+  let id2 = req.params.idarticle;
+  console.log('me too ====>',id1);
+  model.deleteArticle(id1,id2)
     .then(data =>{
-      let index = data.articles.findIndex(x => x._id == id);
-      console.log('index     ===',index);
-      data.articles.splice(index,1);
-      console.log('data    =====',data.articles.length);
       res.json(data);
-    }); 
+    });
 }
 
 
