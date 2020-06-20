@@ -12,7 +12,7 @@ module.exports = (req, res, next) => {
     const [user, pass] = base64.decode(basic).split(':');
     users.authenticateBasic(user, pass)
       .then(validator => {
-        req.token = users.getToken(validator[0]);
+        req.token = users.getToken(validator);
         next();
       }).catch(err => {
         next('You must sign up');

@@ -1,9 +1,8 @@
 'use strict';
-
+require('dotenv').config();
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const userread = require('../model/user-model');
-require('dotenv').config();
 
 const SECRET = process.env.SECRET;
 
@@ -18,7 +17,7 @@ let users = {};
 
 users.saveHash = async function(record) {
   let dataRecord = await userread.read(record.user_name);
-  if (!dataRecord[0]) {
+  if (!dataRecord || !dataRecord[0]) { //add !dataRexord to avoid null problem
     record.password = await bcrypt.hash(record.password, 5);
     return record;
   } else {
@@ -28,7 +27,7 @@ users.saveHash = async function(record) {
 };
 users.authenticateBasic = async function(user, pass) {
   const dataRexord = await userread.read(user);
-  let valid = await bcrypt.compare(pass, dataRexord[0].password);
+  let valid = await bcrypt.compare(pass, dataRexord.password);
   return valid ? dataRexord : Promise.reject();
 };
 
