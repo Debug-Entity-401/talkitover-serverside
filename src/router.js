@@ -49,7 +49,7 @@ function profilePageHandler(req, res) {
   const userInfo = req.user;
   res.status(200).send(`**This is ${userInfo.user_name}'s Profile**\nWelcome, ${userInfo.user_name}!`);
 }
-
+//to see the reviews in my profile (added by other users)
 function reviewsHandler(req, res) {
 
 }
@@ -91,8 +91,10 @@ function deletepostsHandler(req, res) {
 function chatHandler(req, res) {
 
 }
-
+//to add a review on another user's profile
 function addReviewHandler(req, res) {
+  // let userInfo = req.user;
+  res.send('user review');
 
 }
 
