@@ -19,9 +19,9 @@ router.get('/profile', bearerMiddleware, profilePageHandler);
 // router.get('/articles', articesHandler);
 router.get('/reviews', bearerMiddleware, reviewsHandler);
 router.get('/talkitoverposts', bearerMiddleware, postsHandler);
-router.post('/talkitoverposts', bearerMiddleware, addpostsHandler);
-router.put('/talkitoverposts/:username/:idpost', bearerMiddleware, editpostsHandler);
-router.delete('/talkitoverposts/:username/:idpost', bearerMiddleware, deletepostsHandler);
+router.post('/talkitoverposts',bearerMiddleware, addpostsHandler);
+router.put('/talkitoverposts/:idpost', bearerMiddleware, editpostsHandler);
+router.delete('/talkitoverposts/:idpost', bearerMiddleware, deletepostsHandler);
 router.get('/chatroom', bearerMiddleware, chatHandler);
 router.get('/addreview', bearerMiddleware, addReviewHandler);
 router.get('/otherprofile/:id', bearerMiddleware, otherUserProfileHandler);
@@ -69,7 +69,7 @@ function addpostsHandler(req, res) {
 }
 
 function editpostsHandler(req, res) {
-  let username=req.params.username;
+  let username=req.user.user_name;
   let idpost=req.params.idpost;
   let newpost=req.body;
   usermodule.read(username)
@@ -92,7 +92,7 @@ function editpostsHandler(req, res) {
 }
 
 function deletepostsHandler(req, res) {
-  let username=req.params.username;
+  let username=req.user.user_name;
   let idpost=req.params.idpost;
   usermodule.read(username)
     .then(data=>{
