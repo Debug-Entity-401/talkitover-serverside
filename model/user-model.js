@@ -8,8 +8,8 @@ class User {
   }
   async read(record) {
     if (record) {
-      let senc = await userSchema.find({ user_name: record });
-      return senc || null;
+      let userRecord = await userSchema.find({ user_name: record });
+      return userRecord || null;
     } else {
       return await userSchema.find({});
     }

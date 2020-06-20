@@ -4,6 +4,7 @@
 const express = require('express'); const router = express.Router();
 const postmodule = require('../model/post-model');
 const users = require('./users');
+const User = require('../model/user-model');
 const bearerMiddleware = require('../middleware/bearer-auth');
 const aclMiddleware = require('../middleware/acl-middleware');
 
@@ -22,7 +23,7 @@ router.put('/talkitoverposts/:id', bearerMiddleware, aclMiddleware, editpostsHan
 router.delete('/talkitoverposts/:id', bearerMiddleware, aclMiddleware, deletepostsHandler);
 router.get('/chatroom', bearerMiddleware, chatHandler);
 router.get('/addreview', bearerMiddleware, addReviewHandler);
-router.get('/otherprofile/:id', bearerMiddleware, otherUserProfileHandler);
+router.get('/otherprofile/:username', bearerMiddleware, otherUserProfileHandler);
 //'/article' --> get, put(id - bearer, acl), delete(id - bearer, acl), post(bearer, acl)
 router.get('/saved-articles', bearerMiddleware, articlesHandler); //user
 router.post('/articles/:id', aclMiddleware, bearerMiddleware, articlesHandler);  //admin
@@ -99,7 +100,26 @@ function addReviewHandler(req, res) {
 }
 
 function otherUserProfileHandler(req, res) {
-
+  req.user.capabilities = ['READ'];
+  let username = req.params.username;
+  console.log(req.user);
+  User.read(username)
+    .then(otherUser => {
+      if(otherUser[0].user_name !== req.user.user_name) {
+        let otherUserInfo = {
+          username: otherUser[0].user_name,
+          email: otherUser[0].email,
+          phone_number: otherUser[0].phoneNumber,
+          country: otherUser[0].country,
+          photo: otherUser[0].photo,
+        };
+        console.log(otherUserInfo);
+        res.status(200).send(`Welcome to ${otherUser[0].user_name}'s Profile!\nUser Info:\n${JSON.stringify(otherUserInfo)}`);
+      }
+      else {
+        res.redirect('/profile');
+      }
+    });
 }
 
 function articlesHandler(req, res) {

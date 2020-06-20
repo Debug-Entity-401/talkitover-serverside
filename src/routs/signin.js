@@ -14,7 +14,7 @@ function signinUser(req, res) {
     expires: new Date(Date.now() + day),
     httpOnly: true,
   });
-  console.log(req.token);
+  // console.log(req.token);
   res.status(201).redirect('/home');
   // res.status(201).send(token);
 }
