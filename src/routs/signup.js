@@ -20,12 +20,15 @@ function signUpUser(req, res, next) {
       signUp.create(saveInfo)
         .then(user => {
           let token = users.getToken(user);
+          req.headers.Authorization = `Token ${token}`; 
           let day = 86400000;
           res.cookie('remember token', token, {
             expires: new Date(Date.now() + day),
             httpOnly: true,
           });
-          res.status(201).send(token);
+          // console.log('Header>>>>>>>>>', req.headers);
+          res.status(201).redirect('/home');
+          // res.status(201).send(token);
         }).catch(err => {
           res.status(403).send('Invalid Signup! email is taken');
         });

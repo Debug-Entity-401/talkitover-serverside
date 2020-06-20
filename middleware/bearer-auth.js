@@ -3,11 +3,14 @@
 const users = require('../src/users');
 
 module.exports = (req, res, next) => {
-  if (!req.headers.authorization) {
-    next('you must log in');
+  // console.log('Bearer>>>>>>>', req.headers);
+  if (!req.headers.cookie) {
+    // console.log('bearer', req.headers.cookie);
+    next('You Must Log-in');
     return;
   }
-  const bearerToken = req.headers.authorization.split(' ').pop();
+  const bearerToken = req.headers.cookie.split('=').pop();
+  // console.log('Bearer Token>>>>>>>>>>>', bearerToken);
   users.verifyToken(bearerToken).then(userInfo => {
     req.user = userInfo;
     next();

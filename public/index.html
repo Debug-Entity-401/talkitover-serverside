@@ -7,13 +7,15 @@
 
 <body>
     <a id="login" href="">log in with FaceBook</a>
+    <br>
+    <a id="reg" href="">Register</a>
 </body>
 <script>
     let url = 'https://developer19.us.auth0.com/oauth';
 
     let codeOptions = {
         client_id: 'bFHQwKNy1vmIfVwDd9UnR6qjzNYZO342',
-        redirect: 'http://localhost:3031/oauth',
+        redirect: 'http://localhost:3000/oauth',
         scope: 'read:user',
         state: 'oauthstate'
     }
@@ -23,6 +25,11 @@
     let authURL = `${url}?${queryString}`;
     let link = document.getElementById('login');
     link.setAttribute('href', authURL);
+    /////////////
+    let regUrl = `http://localhost:3000/register`;
+    let reg = document.getElementById('reg');
+    reg.setAttribute('href', regUrl);
+    // let signin = document.createElement()
 </script>
 
 </html>
