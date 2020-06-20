@@ -7,6 +7,7 @@ const router = express.Router();
 
 router.post('/signin', basicAuth, signinUser);
 router.get('/secret', bearerAuth, datauser );
+
 function signinUser(req, res) {
   let token = req.token;
   let day = 86400000;

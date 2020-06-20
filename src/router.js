@@ -11,24 +11,33 @@ const aclMiddleware = require('../middleware/acl-middleware');
 ////////////////////
 
 ////routes
+//main, home, and profiles
 router.get('/register', registerHandler);
 router.get('/home', bearerMiddleware, homePageHandler);
 router.get('/profile', bearerMiddleware, profilePageHandler);
+router.get('/otherprofile/:username', bearerMiddleware, otherUserProfileHandler);
+
+//quotes
 // router.get('quotes', quotesHandler);
-// router.get('/articles', articesHandler);
+
+//reviews
 router.get('/reviews', bearerMiddleware, reviewsHandler);
+router.get('/addreview', bearerMiddleware, addReviewHandler);
+
+//posts
 router.get('/talkitoverposts', bearerMiddleware, postsHandler);
 router.post('/talkitoverposts', bearerMiddleware, addpostsHandler);
 router.put('/talkitoverposts/:id', bearerMiddleware, aclMiddleware, editpostsHandler);
 router.delete('/talkitoverposts/:id', bearerMiddleware, aclMiddleware, deletepostsHandler);
+
+//chatroom
 router.get('/chatroom', bearerMiddleware, chatHandler);
-router.get('/addreview', bearerMiddleware, addReviewHandler);
-router.get('/otherprofile/:username', bearerMiddleware, otherUserProfileHandler);
-//'/article' --> get, put(id - bearer, acl), delete(id - bearer, acl), post(bearer, acl)
+
+//articles
 router.get('/saved-articles', bearerMiddleware, articlesHandler); //user
-router.post('/articles/:id', aclMiddleware, bearerMiddleware, articlesHandler);  //admin
-router.put('/articles/:id', aclMiddleware, bearerMiddleware, articlesHandler);  //admin
-router.delete('/articles/:id', aclMiddleware, bearerMiddleware, articlesHandler);  //admin
+router.post('/articles/:id', bearerMiddleware, aclMiddleware, articlesHandler);  //admin
+router.put('/articles/:id', bearerMiddleware, aclMiddleware, articlesHandler);  //admin
+router.delete('/articles/:id', bearerMiddleware, aclMiddleware, articlesHandler);  //admin
 router.delete('/saved-articles/:id', bearerMiddleware, articlesHandler); //user
 
 ////////////////////
@@ -102,7 +111,7 @@ function addReviewHandler(req, res) {
 function otherUserProfileHandler(req, res) {
   req.user.capabilities = ['READ'];
   let username = req.params.username;
-  console.log(req.user);
+  // console.log(req.user);
   User.read(username)
     .then(otherUser => {
       if(otherUser[0].user_name !== req.user.user_name) {
@@ -117,6 +126,7 @@ function otherUserProfileHandler(req, res) {
         res.status(200).send(`Welcome to ${otherUser[0].user_name}'s Profile!\nUser Info:\n${JSON.stringify(otherUserInfo)}`);
       }
       else {
+        req.user.capabilities = ['READ', 'CREATE'];
         res.redirect('/profile');
       }
     });
