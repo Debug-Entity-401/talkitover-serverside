@@ -1,13 +1,51 @@
 
-// 'use strict';
+'use strict';
 
-// const express = require('express');
-// const route = express.Router();
-// const Model = require('../model/schema/general-model');
+const express = require('express');
+const route = express.Router();
+const Model = require('../model/schema/general-model');
+const article = new Model(require('../model/schema/articlesschema'));
 
-// const article = new Model(require('../model/schema/articlesschema'));
 
-// route.get('/getAll',getAll);
-// route.post('/ipdate/:id',updateArt);
-// route.delete('/remove/:id',remove);
-// route.
+route.get('/getAll',getAll);
+route.put('/update/:id',updateArt);
+route.delete('/remove/:id',remove);
+route.post('/add',addArticle);
+
+function getAll(req,res,next){
+  let status = req.query.status;
+  article.read(status)
+    .then(all =>{
+      res.json(all);
+    });
+}
+function addArticle(req,res,next){
+  let newArticle = req.body;
+  article.create(newArticle)
+    .then(newArt =>{
+      res.json(newArt);
+    });
+  
+}
+
+function updateArt(req,res,next){
+  let newArticle = req.body;
+  let id = req.params.id;
+  article.update(id,newArticle)
+    .then(newArt =>{
+      res.json(newArt);
+    });
+}
+
+function remove(req,res,next){
+  let id = req.params.id;
+  article.delete(id)
+    .then(()=>{
+      res.send('the article deleted');
+    });
+  
+}
+
+
+
+module.exports = route;

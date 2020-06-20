@@ -8,6 +8,7 @@ const usermodule=require('../model/user-model');
 const bearerMiddleware = require('../middleware/bearer-auth');
 const aclMiddleware = require('../middleware/acl-middleware');
 
+
 ////////////////////
 
 ////routes
@@ -19,7 +20,7 @@ router.get('/profile', bearerMiddleware, profilePageHandler);
 router.get('/reviews', bearerMiddleware, reviewsHandler);
 router.get('/talkitoverposts', bearerMiddleware, postsHandler);
 router.post('/talkitoverposts', bearerMiddleware, addpostsHandler);
-router.put('/talkitoverposts/:id', bearerMiddleware, editpostsHandler);
+router.put('/talkitoverposts/:username/:idpost', bearerMiddleware, editpostsHandler);
 router.delete('/talkitoverposts/:username/:idpost', bearerMiddleware, deletepostsHandler);
 router.get('/chatroom', bearerMiddleware, chatHandler);
 router.get('/addreview', bearerMiddleware, addReviewHandler);
@@ -68,24 +69,49 @@ function addpostsHandler(req, res) {
 }
 
 function editpostsHandler(req, res) {
+  let username=req.params.username;
+  let idpost=req.params.idpost;
   let newpost=req.body;
-  let id=req.params.id;
-  postmodule.update(id,newpost)
+  usermodule.read(username)
     .then(data=>{
-      res.json(data);
+      postmodule.readById(idpost)
+        .then(postdata=>{
+          if(data.role ==='Administrators' || postdata[0].user_name===data.user_name)
+          {
+            postmodule.update(idpost,newpost)
+              .then(data=>{
+                res.json(data);
+              });
+          }
+          else
+          {
+            res.send('you connot update the post');
+          }
+        });
     });
 }
 
 function deletepostsHandler(req, res) {
   let username=req.params.username;
+  let idpost=req.params.idpost;
   usermodule.read(username)
     .then(data=>{
-    if(data.role ==='Administrators')
-    });
-  
-  postmodule.delete(id)
-    .then(data=>{
-      res.send('post deleted');
+
+      postmodule.readById(idpost)
+        .then(postdata=>{
+          console.log('postdata',postdata[0].user_name);
+          if(data.role ==='Administrators' || postdata[0].user_name===data.user_name)
+          {
+            postmodule.delete(idpost)
+              .then(data=>{
+                res.send('post deleted');
+              });
+          }
+          else
+          {
+            res.send('you connot delete');
+          }
+        });
     });
 }
 
@@ -105,5 +131,5 @@ function articlesHandler(req, res) {
     
 }
 
-
+module.exports=router;
 

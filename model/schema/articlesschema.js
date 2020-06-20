@@ -7,6 +7,7 @@ const articles = mongoose.Schema({
   text:{type:String,required:true},
   status:{type:String,enum:['new','old'],required:true},
   url:{type:String,required:true},
+  user:{type: mongoose.Schema.Types.ObjectId, ref:'user'},
 });
 
 
