@@ -1,6 +1,6 @@
 'use strict';
 
-const userSchema = require('./user-schema');
+const userSchema = require('./schema/user-schema');
 
 class User {
   constructor(userSchema) {

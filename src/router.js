@@ -2,7 +2,7 @@
 
 ////require
 const express = require('express'); const router = express.Router();
-const postmodule=require('../model/schema/post-model');
+const postmodule = require('../model/post-model');
 const users = require('./users');
 const bearerMiddleware = require('../middleware/bearer-auth');
 const aclMiddleware = require('../middleware/acl-middleware');
@@ -39,11 +39,15 @@ function registerHandler(req, res) {
 }
 
 function homePageHandler(req, res) {
+  //req.user --> user info
+  const userInfo = req.user;
+  res.status(200).send(`**This is Homepage**\nWelcome, ${userInfo.user_name}!`);
 
 }
 
 function profilePageHandler(req, res) {
-
+  const userInfo = req.user;
+  res.status(200).send(`**This is ${userInfo.user_name}'s Profile**\nWelcome, ${userInfo.user_name}!`);
 }
 
 function reviewsHandler(req, res) {

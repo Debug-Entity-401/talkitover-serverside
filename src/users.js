@@ -13,18 +13,17 @@ let role = {
   Editors: ['READ', 'CREATE', 'UPDATE'],
   Administrators: ['READ', 'CREATE', 'UPDATE', 'DELETE'],
 };
+
 let users = {};
+
 users.saveHash = async function(record) {
-
-  let dataRexord = await userread.read(record.user_name);
-  if (!dataRexord[0]) {
+  let dataRecord = await userread.read(record.user_name);
+  if (!dataRecord[0]) {
     record.password = await bcrypt.hash(record.password, 5);
-
     return record;
   } else {
     console.error('it is already exists');
-    return dataRexord;
-
+    return dataRecord;
   }
 };
 users.authenticateBasic = async function(user, pass) {
@@ -47,8 +46,8 @@ users.verifyToken = async function(token) {
       return Promise.reject(err);
     }
     let username = decoded.user_name;
-    let dataRexord = await userread.read(username);
-    if (dataRexord) {
+    let dataRecord = await userread.read(username);
+    if (dataRecord) {
       return Promise.resolve(decoded);
     }
     return Promise.reject();
