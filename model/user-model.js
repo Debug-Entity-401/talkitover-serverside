@@ -2,8 +2,8 @@
 
 const userSchema = require('./user-schema');
 require('../model/schema/articlesschema');
-const Model = require('../model/schema/general-model');
-const article = new Model(require('../model/schema/articlesschema'));
+// const Model = require('../model/schema/general-model');
+// const article = new Model(require('../model/schema/articlesschema'));
 
 class User {
   constructor(userSchema) {
@@ -22,10 +22,11 @@ class User {
     return await newUser.save(record);
   }
   async articleByUser(id1,id2){
-    return await article.readById(id2)
-      .then(async data =>{
-        return await userSchema.findOneAndUpdate({ _id: id1 }, {$push: {articles: data[0]}}, { new: true });
-      });
+    return await userSchema.findOneAndUpdate({ _id: id1 }, {$push: {articles: id2}}, { new: true });
+  }
+
+  async deleteArticle(id1,id2){  
+    return await userSchema.findOneAndUpdate({ _id: id1 }, { $pull: {articles: id2} },{new:true});
   }
 }
 

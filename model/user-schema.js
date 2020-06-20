@@ -14,10 +14,8 @@ const user = mongoose.Schema({
   }],
   role: { type: String },
 },{
-  timestamps: true,
   toJSON: {
     virtuals: true,
-    
   },
 });
 
