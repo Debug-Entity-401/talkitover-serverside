@@ -1,7 +1,8 @@
 'use strict';
 
 ////require
-const express = require('express'); const router = express.Router();
+const express = require('express');
+const router = express.Router();
 const postmodule = require('../model/post-model');
 const User = require('../model/user-model');
 const bearerMiddleware = require('../middleware/bearer-auth');
@@ -26,16 +27,16 @@ router.get('/addreview', bearerMiddleware, addReviewHandler);
 
 //posts
 router.get('/talkitoverposts', bearerMiddleware, postsHandler);
-router.post('/talkitoverposts',bearerMiddleware, addpostsHandler);
+router.post('/talkitoverposts', bearerMiddleware, aclMiddleware('POST'), addpostsHandler);
 router.put('/talkitoverposts/:idpost', bearerMiddleware, editpostsHandler);
 router.delete('/talkitoverposts/:idpost', bearerMiddleware, deletepostsHandler);
 router.get('/chatroom', bearerMiddleware, chatHandler);
 
 //articles
 router.get('/saved-articles', bearerMiddleware, articlesHandler); //user
-router.post('/articles/:id', bearerMiddleware, aclMiddleware, articlesHandler);  //admin
-router.put('/articles/:id', bearerMiddleware, aclMiddleware, articlesHandler);  //admin
-router.delete('/articles/:id', bearerMiddleware, aclMiddleware, articlesHandler);  //admin
+router.post('/articles/:id', bearerMiddleware, aclMiddleware, articlesHandler); //admin
+router.put('/articles/:id', bearerMiddleware, aclMiddleware, articlesHandler); //admin
+router.delete('/articles/:id', bearerMiddleware, aclMiddleware, articlesHandler); //admin
 router.delete('/saved-articles/:id', bearerMiddleware, articlesHandler); //user
 
 ////////////////////
@@ -64,36 +65,33 @@ function reviewsHandler(req, res) {
 
 function postsHandler(req, res) {
   postmodule.read()
-    .then(data=>{
+    .then(data => {
       res.status(200).json(data);
     });
 }
 
 function addpostsHandler(req, res) {
-  let newpost=req.body;
+  let newpost = req.body;
   postmodule.create(newpost)
-    .then(data=>{
+    .then(data => {
       res.status(201).json(data);
     });
 }
 
 function editpostsHandler(req, res) {
-  let username=req.user.user_name;
-  let idpost=req.params.idpost;
-  let newpost=req.body;
+  let username = req.user.user_name;
+  let idpost = req.params.idpost;
+  let newpost = req.body;
   User.read(username)
-    .then(data=>{
+    .then(data => {
       postmodule.readById(idpost)
-        .then(postdata=>{
-          if(data.role ==='Administrators' || postdata[0].user_name===data.user_name)
-          {
-            postmodule.update(idpost,newpost)
-              .then(data=>{
+        .then(postdata => {
+          if (data.role === 'Administrators' || postdata[0].user_name === data.user_name) {
+            postmodule.update(idpost, newpost)
+              .then(data => {
                 res.json(data);
               });
-          }
-          else
-          {
+          } else {
             res.send('you connot update the post');
           }
         });
@@ -101,23 +99,20 @@ function editpostsHandler(req, res) {
 }
 
 function deletepostsHandler(req, res) {
-  let username=req.user.user_name;
-  let idpost=req.params.idpost;
+  let username = req.user.user_name;
+  let idpost = req.params.idpost;
   User.read(username)
-    .then(data=>{
+    .then(data => {
 
       postmodule.readById(idpost)
-        .then(postdata=>{
-          console.log('postdata',postdata[0].user_name);
-          if(data.role ==='Administrators' || postdata[0].user_name===data.user_name)
-          {
+        .then(postdata => {
+          console.log('postdata', postdata[0].user_name);
+          if (data.role === 'Administrators' || postdata[0].user_name === data.user_name) {
             postmodule.delete(idpost)
-              .then(data=>{
+              .then(data => {
                 res.send('post deleted');
               });
-          }
-          else
-          {
+          } else {
             res.send('you connot delete');
           }
         });
@@ -140,7 +135,7 @@ function otherUserProfileHandler(req, res) {
   // console.log(req.user);
   User.read(username)
     .then(otherUser => {
-      if(otherUser[0].user_name !== req.user.user_name) {
+      if (otherUser[0].user_name !== req.user.user_name) {
         let otherUserInfo = {
           username: otherUser[0].user_name,
           email: otherUser[0].email,
@@ -150,8 +145,7 @@ function otherUserProfileHandler(req, res) {
         };
         console.log(otherUserInfo);
         res.status(200).send(`Welcome to ${otherUser[0].user_name}'s Profile!\nUser Info:\n${JSON.stringify(otherUserInfo)}`);
-      }
-      else {
+      } else {
         req.user.capabilities = ['READ', 'CREATE'];
         res.redirect('/profile');
       }
@@ -159,7 +153,7 @@ function otherUserProfileHandler(req, res) {
 }
 
 function articlesHandler(req, res) {
-    
+
 }
 
 
