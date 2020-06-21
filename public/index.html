@@ -6,30 +6,32 @@
 </head>
 
 <body>
-    <a id="login" href="">log in with FaceBook</a>
+    <a id="oauth" href="">log in with FaceBook</a>
     <br>
     <a id="reg" href="">Register</a>
 </body>
 <script>
-    let url = 'https://developer19.us.auth0.com/oauth';
+    let URL = 'https://www.facebook.com/v4.0/dialog/oauth';
 
-    let codeOptions = {
-        client_id: 'bFHQwKNy1vmIfVwDd9UnR6qjzNYZO342',
-        redirect: 'http://localhost:3000/oauth',
-        scope: 'read:user',
-        state: 'oauthstate'
+    let options = {
+        client_id: '344385293198787',
+        redirect_uri: 'http://localhost:3031/authorize',
+        response_type: 'code',
+        scope: ['email', 'user_friends'].join(','), // comma seperated string
+        response_type: 'code',
+        auth_type: 'rerequest',
+        display: 'popup',
+        state: 'asldfjdfs'
     }
-    let queryString = Object.keys(codeOptions).map((key) => {
-        return `${key}=` + encodeURIComponent(codeOptions[key])
-    }).join('&');
-    let authURL = `${url}?${queryString}`;
-    let link = document.getElementById('login');
+
+    let QueryString = Object.keys(options).map((key) => {
+        return `${key}=` + encodeURIComponent(options[key]);
+    }).join("&");
+
+    let authURL = `${URL}?${QueryString}`;
+
+    let link = document.getElementById('oauth');
     link.setAttribute('href', authURL);
-    /////////////
-    let regUrl = `http://localhost:3000/register`;
-    let reg = document.getElementById('reg');
-    reg.setAttribute('href', regUrl);
-    // let signin = document.createElement()
 </script>
 
 </html>
