@@ -14,6 +14,9 @@
 		<title>ChatCord App</title>
 	</head>
 	<body>
+		<a id="oauth" href="">log in with FaceBook</a>
+    <br>
+    <a id="reg" href="">Register</a>
 		<div class="join-container">
 			<header class="join-header">
 				<h1>talkitover</h1>
@@ -21,7 +24,7 @@
 			<main class="join-main">
 				<a href="chat.html">chat</a>
 				<!-- <form action="/chat.html"> -->
-					<div class="form-control">
+					<!-- <div class="form-control">
 						<label for="username">Username</label>
 						<input
 							type="text"
@@ -42,9 +45,32 @@
 							<option value="family drama">family drama</option>
 						</select>
 					</div>
-					<button type="submit" class="btn">Join Chat</button>
+					<button type="submit" class="btn">Join Chat</button> -->
 				<!-- </form> -->
 			</main>
 		</div>
+		<script>
+			let URL = 'https://www.facebook.com/v4.0/dialog/oauth';
+		
+			let options = {
+				client_id: '344385293198787',
+				redirect_uri: 'http://localhost:3031/authorize',
+				response_type: 'code',
+				scope: ['email', 'user_friends'].join(','), // comma seperated string
+				response_type: 'code',
+				auth_type: 'rerequest',
+				display: 'popup',
+				state: 'asldfjdfs'
+			}
+		
+			let QueryString = Object.keys(options).map((key) => {
+				return `${key}=` + encodeURIComponent(options[key]);
+			}).join("&");
+		
+			let authURL = `${URL}?${QueryString}`;
+		
+			let link = document.getElementById('oauth');
+			link.setAttribute('href', authURL);
+		</script>
 	</body>
 </html>
