@@ -8,7 +8,8 @@ const SECRET = process.env.SECRET;
 
 let role = {
   Regular_users: ['READ'],
-  Writers: ['READ', 'CREATE'],
+  Listener: ['READ', 'CREATE'],
+  ventor: ['READ', 'CREATE', 'POST'], // add a new capability to the ventor to create their posts
   Editors: ['READ', 'CREATE', 'UPDATE'],
   Administrators: ['READ', 'CREATE', 'UPDATE', 'DELETE', 'DELETE REVIEW'],
 };

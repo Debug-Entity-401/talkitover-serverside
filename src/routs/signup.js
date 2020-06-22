@@ -14,13 +14,11 @@ function signUpUser(req, res, next) {
       let admins = ['AlaaMs', 'Ammaro', 'BushraB', 'SondosA'];
       if (admins.includes(saveInfo.user_name)) {
         saveInfo.role = 'Administrators';
-      } else {
-        saveInfo.role = 'Writers';
-      }
+      } // edite the defult role 
       signUp.create(saveInfo)
         .then(user => {
           let token = users.getToken(user);
-          req.headers.Authorization = `Token ${token}`; 
+          req.headers.Authorization = `Token ${token}`;
           let day = 86400000;
           res.cookie('remember token', token, {
             expires: new Date(Date.now() + day),

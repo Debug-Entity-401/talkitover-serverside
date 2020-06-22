@@ -1,4 +1,3 @@
-
 'use strict';
 
 const express = require('express');
@@ -9,43 +8,44 @@ const acl = require('../middleware/acl-middleware');
 const bearer = require('../middleware/bearer-auth');
 
 
-route.get('/getAll',bearer,acl('READ'),getAll);
-route.put('/update/:id',bearer,acl('UPDATE'),updateArt);
-route.delete('/remove/:id',bearer,acl('DELETE'),remove);
-route.post('/add',bearer,acl('CREATE'),addArticle);
+route.get('/articles', bearer, acl('READ'), getAll);
+route.put('/articles/:id', bearer, acl('UPDATE'), updateArt);
+route.delete('/articles/:id', bearer, acl('DELETE'), remove);
+route.post('/articles', bearer, acl('CREATE'), addArticle);
 
-function getAll(req,res,next){
+function getAll(req, res, next) {
   let status = req.query.status;
   article.read(status)
-    .then(all =>{
+    .then(all => {
       res.json(all);
     });
 }
-function addArticle(req,res,next){
+
+function addArticle(req, res, next) {
   let newArticle = req.body;
   article.create(newArticle)
-    .then(newArt =>{
+    .then(newArt => {
       res.json(newArt);
     });
-  
+
 }
 
-function updateArt(req,res,next){
+function updateArt(req, res, next) {
   let newArticle = req.body;
   let id = req.params.id;
-  article.update(id,newArticle)
-    .then(newArt =>{
+  article.update(id, newArticle)
+    .then(newArt => {
       res.json(newArt);
     });
 }
 
-function remove(req,res,next){
+function remove(req, res, next) {
   let id = req.params.id;
   article.delete(id)
-    .then(()=>{
+    .then(() => {
       res.send('the article deleted');
     });
-  
+
 }
 
 

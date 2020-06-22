@@ -15,7 +15,7 @@ slick.emit('join', channel);
 
 // Update our global channel variable, and getting the channel
 slick.on('joined', (joinedChannel) => {
-  console.log("on joined !! update")
+  console.log('on joined !! update');
   channel = joinedChannel;
 });
 
@@ -23,7 +23,7 @@ slick.on('joined', (joinedChannel) => {
 slick.on('message', payload => {
   console.clear();
   messages.push(payload);
-  messages.forEach(message => console.log(message))
+  messages.forEach(message => console.log(message));
   console.log('');
   beSlick();
 });
@@ -40,28 +40,28 @@ async function beSlick() {
     {
       prefix: '',
       name: 'text',
-      message: `-----------------------------------\n ${channel} >`
-    }
+      message: `-----------------------------------\n ${channel} >`,
+    },
   ]);
 
   // Pull out the first 4 chars of the input to find exit or join
   let command = response.text.toLowerCase().split('', 4).join('');
   // either deal with the command, or send the message
   switch (command) {
-    case 'quit':
-      process.exit();
-      break;
-    case 'join':
-      let room = response.text.split(' ')[1] || channel; // default to the current channel
-      activeInput = false;
-      slick.emit('join', room);
-      beSlick();
-      break;
-    default:
-      activeInput = false;
-      slick.emit('message', response.text)
-      beSlick();
-      break;
+  case 'quit':
+    process.exit();
+    break;
+  case 'join':
+    let room = response.text.split(' ')[1] || channel; // default to the current channel
+    activeInput = false;
+    slick.emit('join', room);
+    beSlick();
+    break;
+  default:
+    activeInput = false;
+    slick.emit('message', response.text);
+    beSlick();
+    break;
   }
 }
 

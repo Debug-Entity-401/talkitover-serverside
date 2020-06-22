@@ -8,11 +8,6 @@ class User {
     this.schama = userSchema;
   }
   async read(record) {
-    // if (record) {
-    //   let userRecord = await userSchema.find({ user_name: record });
-    //   return userRecord || null;
-    // } else {
-    //   return await userSchema.find({});}
     if (record) { //add populate for join
       let userRecord = await userSchema.findOne({ user_name: record }).populate('articles');
       return userRecord || null;
@@ -38,12 +33,12 @@ class User {
   }
 
   //add two functions
-  async articleByUser(id1,id2){
-    return await userSchema.findOneAndUpdate({ user_name: id1 }, {$push: {articles: id2}}, { new: true });
+  async articleByUser(id1, id2) {
+    return await userSchema.findOneAndUpdate({ user_name: id1 }, { $push: { articles: id2 } }, { new: true });
   }
 
-  async deleteArticle(id1,id2){  
-    return await userSchema.findOneAndUpdate({ user_name: id1}, { $pull: {articles: id2} },{new:true});
+  async deleteArticle(id1, id2) {
+    return await userSchema.findOneAndUpdate({ user_name: id1 }, { $pull: { articles: id2 } }, { new: true });
   }
 }
 ///
