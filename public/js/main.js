@@ -3,20 +3,24 @@
 ////////////////////////////////
 //////client
 
-const io = require('socket.io-client');
-const chat = io.connect('http://localhost:3030/chat');
+// const io = require('socket.io-client');
+// const chat = io.connect('http://localhost:3030/chat');
+// 'http://localhost'
 
+
+
+const socket = io('http://localhost:3031/chat.html');
 const room = 'Private Chat Room';
 
 // console.log(client.request.headers.cookie);
 
-chat.emit('joinRoom', room);  //3. send the room name to the server
-chat.on('joinRoom', room => {
+socket.emit('joinRoom', room);  //3. send the room name to the server
+socket.on('joinRoom', room => {
   console.log(room);
 
 });  //7. print the room name 
 
-chat.on('disconnected', (msg) => {
+socket.on('disconnected', (msg) => {
   console.log(msg);
 });
 
@@ -25,14 +29,14 @@ chat.on('disconnected', (msg) => {
 // let messages = [];
 
 const chatform = document.getElementById('chat-form');
-chat.on('message', (message) =>{
+socket.on('message', (message) =>{
   outputmessage(message);
 });
 
 chatform.addEventListener('submit', (e)=> {
   e.preventDefault();
   const msg = e.target.elements.msg.value;
-  chat.emit('message', msg);
+  socket.emit('message', msg);
 });
 
 let date = new Date(Date.now());
@@ -55,7 +59,7 @@ ${message}
   document.querySelector('.chat-messages').appendChild(div);
 }
 
-// chat.on('message', message => {  //11. print the msg payload!!!!
+// socket.on('message', message => {  //11. print the msg payload!!!!
 //   console.clear();
 //   messages.push(message);
 //   messages.forEach(message => {
@@ -71,7 +75,7 @@ ${message}
 //     { name: 'username'},
 //   ]);
 //   let name = input.username;
-//   chat.emit('message', `Name: ${name}`);
+//   socket.emit('message', `Name: ${name}`);
 //   getMsg();
 // }
 // getMsg();

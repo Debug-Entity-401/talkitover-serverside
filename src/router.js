@@ -28,7 +28,7 @@ router.get('/talkitoverposts', bearerMiddleware, postsHandler);
 router.post('/talkitoverposts', bearerMiddleware, aclMiddleware('POST'), addpostsHandler);
 router.put('/talkitoverposts/:idpost', bearerMiddleware, editpostsHandler);
 router.delete('/talkitoverposts/:idpost', bearerMiddleware, deletepostsHandler);
-router.get('/chatroom', bearerMiddleware, chatHandler);
+// router.get('/chatroom', bearerMiddleware, chatHandler);
 
 ////////////////////
 
@@ -125,9 +125,9 @@ function deletepostsHandler(req, res) {
     });
 }
 
-function chatHandler(req, res) {
-
-}
+// function chatHandler(req, res) {
+//   res.redirect('/chat.html');
+// }
 
 function otherUserProfileHandler(req, res) {
   req.user.capabilities = ['READ', 'ADD REVIEW'];
