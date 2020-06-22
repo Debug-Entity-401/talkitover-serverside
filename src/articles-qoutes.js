@@ -3,7 +3,7 @@
 
 const express = require('express');
 const route = express.Router();
-const Model = require('../model/schema/general-model');
+const Model = require('../model/general-model');
 const article = new Model(require('../model/schema/articlesschema'));
 const acl = require('../middleware/acl-middleware');
 const bearer = require('../middleware/bearer-auth');

@@ -10,7 +10,7 @@ let role = {
   Regular_users: ['READ'],
   Writers: ['READ', 'CREATE'],
   Editors: ['READ', 'CREATE', 'UPDATE'],
-  Administrators: ['READ', 'CREATE', 'UPDATE', 'DELETE'],
+  Administrators: ['READ', 'CREATE', 'UPDATE', 'DELETE', 'DELETE REVIEW'],
 };
 
 let users = {};

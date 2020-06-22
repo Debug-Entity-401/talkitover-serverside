@@ -5,8 +5,6 @@ const express = require('express'); const router = express.Router();
 const postmodule = require('../model/post-model');
 const User = require('../model/user-model');
 const bearerMiddleware = require('../middleware/bearer-auth');
-const aclMiddleware = require('../middleware/acl-middleware');
-
 
 ////////////////////
 
@@ -20,23 +18,12 @@ router.get('/otherprofile/:username', bearerMiddleware, otherUserProfileHandler)
 //quotes
 // router.get('quotes', quotesHandler);
 
-//reviews
-router.get('/reviews', bearerMiddleware, reviewsHandler);
-router.get('/addreview', bearerMiddleware, addReviewHandler);
-
 //posts
 router.get('/talkitoverposts', bearerMiddleware, postsHandler);
 router.post('/talkitoverposts',bearerMiddleware, addpostsHandler);
 router.put('/talkitoverposts/:idpost', bearerMiddleware, editpostsHandler);
 router.delete('/talkitoverposts/:idpost', bearerMiddleware, deletepostsHandler);
 router.get('/chatroom', bearerMiddleware, chatHandler);
-
-//articles
-router.get('/saved-articles', bearerMiddleware, articlesHandler); //user
-router.post('/articles/:id', bearerMiddleware, aclMiddleware, articlesHandler);  //admin
-router.put('/articles/:id', bearerMiddleware, aclMiddleware, articlesHandler);  //admin
-router.delete('/articles/:id', bearerMiddleware, aclMiddleware, articlesHandler);  //admin
-router.delete('/saved-articles/:id', bearerMiddleware, articlesHandler); //user
 
 ////////////////////
 
@@ -54,12 +41,14 @@ function homePageHandler(req, res) {
 }
 
 function profilePageHandler(req, res) {
-  const userInfo = req.user;
-  res.status(200).send(`**This is ${userInfo.user_name}'s Profile**\nWelcome, ${userInfo.user_name}!`);
-}
-//to see the reviews in my profile (added by other users)
-function reviewsHandler(req, res) {
-
+  //todo: show user's info in the profile page, including the articles and reviews (virtual joins)
+  const user = req.user;
+  const username = user.user_name;
+  User.read(username)
+    .then(userInfo => {
+      // console.log('user info>>>>>>\n', userInfo);
+      res.status(200).send(`**This is ${username}'s Profile**\nWelcome, ${username}!\nInfo:\n${JSON.stringify(userInfo)}`);
+    });
 }
 
 function postsHandler(req, res) {
@@ -85,7 +74,7 @@ function editpostsHandler(req, res) {
     .then(data=>{
       postmodule.readById(idpost)
         .then(postdata=>{
-          if(data.role ==='Administrators' || postdata[0].user_name===data.user_name)
+          if(postdata[0].user_name===data.user_name)
           {
             postmodule.update(idpost,newpost)
               .then(data=>{
@@ -105,7 +94,6 @@ function deletepostsHandler(req, res) {
   let idpost=req.params.idpost;
   User.read(username)
     .then(data=>{
-
       postmodule.readById(idpost)
         .then(postdata=>{
           console.log('postdata',postdata[0].user_name);
@@ -127,39 +115,30 @@ function deletepostsHandler(req, res) {
 function chatHandler(req, res) {
 
 }
-//to add a review on another user's profile
-function addReviewHandler(req, res) {
-  // let userInfo = req.user;
-  res.send('user review');
-
-}
 
 function otherUserProfileHandler(req, res) {
-  req.user.capabilities = ['READ'];
+  req.user.capabilities = ['READ', 'ADD REVIEW'];
   let username = req.params.username;
-  // console.log(req.user);
+  // console.log(username);
   User.read(username)
     .then(otherUser => {
-      if(otherUser[0].user_name !== req.user.user_name) {
+      if(otherUser.user_name !== req.user.user_name) {
         let otherUserInfo = {
-          username: otherUser[0].user_name,
-          email: otherUser[0].email,
-          phone_number: otherUser[0].phoneNumber,
-          country: otherUser[0].country,
-          photo: otherUser[0].photo,
+          username: otherUser.user_name,
+          photo: otherUser.photo,
+          email: otherUser.email,
+          phone_number: otherUser.phoneNumber,
+          country: otherUser.country,
+          reviews: otherUser.reviews,
+          articles: otherUser.articles,
         };
-        console.log(otherUserInfo);
-        res.status(200).send(`Welcome to ${otherUser[0].user_name}'s Profile!\nUser Info:\n${JSON.stringify(otherUserInfo)}`);
+        res.status(200).send(`Welcome to ${otherUser.user_name}'s Profile!\nUser Info:\n${JSON.stringify(otherUserInfo)}`);
       }
       else {
         req.user.capabilities = ['READ', 'CREATE'];
         res.redirect('/profile');
       }
     });
-}
-
-function articlesHandler(req, res) {
-    
 }
 
 
