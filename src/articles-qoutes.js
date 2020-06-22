@@ -8,10 +8,10 @@ const acl = require('../middleware/acl-middleware');
 const bearer = require('../middleware/bearer-auth');
 
 
-route.get('/getAll', bearer, acl('READ'), getAll);
-route.put('/update/:id', bearer, acl('UPDATE'), updateArt);
-route.delete('/remove/:id', bearer, acl('DELETE'), remove);
-route.post('/add', bearer, acl('CREATE'), addArticle);
+route.get('/articles', bearer, acl('READ'), getAll);
+route.put('/articles/:id', bearer, acl('UPDATE'), updateArt);
+route.delete('/articles/:id', bearer, acl('DELETE'), remove);
+route.post('/articles', bearer, acl('CREATE'), addArticle);
 
 function getAll(req, res, next) {
   let status = req.query.status;

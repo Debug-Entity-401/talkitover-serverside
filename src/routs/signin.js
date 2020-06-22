@@ -8,9 +8,9 @@ const router = express.Router();
 
 router.post('/signin', basicAuth, signinUser);
 // add new routs for articles
-router.post('/user/find/:idarticle',bearer,addArticleUser);
-router.get('/user',bearer,readOne);
-router.delete('/user/:idarticle',bearer,deleteArticles);
+router.post('/user-articles/:idarticle',bearer,addArticleUser);
+router.get('/user-articles',bearer,readOne);
+router.delete('/user-articles/:idarticle',bearer,deleteArticles);
 
 function signinUser(req, res) {
   let token = req.token;

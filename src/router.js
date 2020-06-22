@@ -6,7 +6,7 @@ const router = express.Router();
 const postmodule = require('../model/post-model');
 const User = require('../model/user-model');
 const bearerMiddleware = require('../middleware/bearer-auth');
-const aclMiddleware = require('../middleware/acl-middleware');
+// const aclMiddleware = require('../middleware/acl-middleware');
 
 
 ////////////////////
@@ -31,13 +31,6 @@ router.post('/talkitoverposts', bearerMiddleware, aclMiddleware('POST'), addpost
 router.put('/talkitoverposts/:idpost', bearerMiddleware, editpostsHandler);
 router.delete('/talkitoverposts/:idpost', bearerMiddleware, deletepostsHandler);
 router.get('/chatroom', bearerMiddleware, chatHandler);
-
-//articles
-router.get('/saved-articles', bearerMiddleware, articlesHandler); //user
-router.post('/articles/:id', bearerMiddleware, aclMiddleware, articlesHandler); //admin
-router.put('/articles/:id', bearerMiddleware, aclMiddleware, articlesHandler); //admin
-router.delete('/articles/:id', bearerMiddleware, aclMiddleware, articlesHandler); //admin
-router.delete('/saved-articles/:id', bearerMiddleware, articlesHandler); //user
 
 ////////////////////
 
@@ -152,9 +145,8 @@ function otherUserProfileHandler(req, res) {
     });
 }
 
-function articlesHandler(req, res) {
 
-}
+
 
 
 module.exports = router;

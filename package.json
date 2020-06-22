@@ -20,6 +20,7 @@
     },
     "homepage": "https://github.com/talkitover/talkitover#readme",
     "dependencies": {
+        "axios": "^0.19.2",
         "base-64": "^0.1.0",
         "bcrypt": "^5.0.0",
         "cors": "^2.8.5",
