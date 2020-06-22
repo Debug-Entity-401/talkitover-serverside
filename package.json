@@ -4,6 +4,7 @@
     "description": "",
     "main": "index.js",
     "scripts": {
+        "start": "node index.js",
         "test": "jest --coverage",
         "lint": "eslint '**/*.js'",
         "fix-lint": "eslint '**/*.js' --fix"
