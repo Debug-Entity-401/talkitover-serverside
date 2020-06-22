@@ -1,8 +1,6 @@
 'use strict';
-
 const userSchema = require('./schema/user-schema');
 require('../model/schema/articlesschema');
-
 class User {
   constructor(userSchema) {
     this.schama = userSchema;
@@ -18,6 +16,11 @@ class User {
   async create(record) {
     let newUser = new userSchema(record);
     return await newUser.save(record);
+  }
+  async assmentcreate(username,data)
+  {
+    return await userSchema.findOneAndUpdate({ user_name:username,status:data});
+
   }
 
   async addReview(username, review) {
