@@ -1,7 +1,5 @@
 'use strict';
-
 const mongoose = require('mongoose');
-
 const user = mongoose.Schema({
   user_name: { type: String, required: true },
   password: { type: String, required: true },
@@ -9,6 +7,7 @@ const user = mongoose.Schema({
   phonNumber: { type: String },
   country: { type: String },
   photo: { type: String },
+  status:{type:String},
   articles: [{ //add for virtual join
     type: mongoose.Schema.Types.ObjectId,
     ref: 'articles',

@@ -25,8 +25,8 @@ function signUpUser(req, res, next) {
             httpOnly: true,
           });
           // console.log('Header>>>>>>>>>', req.headers);
-          res.status(201).redirect('/home');
-          // res.status(201).send(token);
+          // res.status(201).redirect('/assessment');
+          res.status(201).send(token);
         }).catch(err => {
           res.status(403).send('Invalid Signup! email is taken');
         });
