@@ -11,7 +11,7 @@ let role = {
   Listener: ['READ', 'CREATE'],
   ventor: ['READ', 'CREATE', 'POST'], // add a new capability to the ventor to create their posts
   Editors: ['READ', 'CREATE', 'UPDATE'],
-  Administrators: ['READ', 'CREATE', 'UPDATE', 'DELETE'],
+  Administrators: ['READ', 'CREATE', 'UPDATE', 'DELETE', 'DELETE REVIEW'],
 };
 
 let users = {};

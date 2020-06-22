@@ -1,29 +1,27 @@
 'use strict';
 
 ////require
-const express = require('express');
+const express = require('express'); 
 const router = express.Router();
 const postmodule = require('../model/post-model');
 const User = require('../model/user-model');
 const bearerMiddleware = require('../middleware/bearer-auth');
-// const aclMiddleware = require('../middleware/acl-middleware');
-
+const aclMiddleware = require('../middleware/acl-middleware');
 
 ////////////////////
 
 ////routes
 //main, home, and profiles
-router.get('/register', registerHandler);
+router.get('/register', bearerMiddleware, registerHandler);
 router.get('/home', bearerMiddleware, homePageHandler);
 router.get('/profile', bearerMiddleware, profilePageHandler);
 router.get('/otherprofile/:username', bearerMiddleware, otherUserProfileHandler);
 
-//quotes
+//articles & quotes
 // router.get('quotes', quotesHandler);
-
-//reviews
-router.get('/reviews', bearerMiddleware, reviewsHandler);
-router.get('/addreview', bearerMiddleware, addReviewHandler);
+router.post('/user-articles/:idarticle', bearerMiddleware, addArticleUser);
+router.get('/user-articles', bearerMiddleware, readOne);
+router.delete('/user-articles/:idarticle', bearerMiddleware, deleteArticles);
 
 //posts
 router.get('/talkitoverposts', bearerMiddleware, postsHandler);
@@ -37,7 +35,12 @@ router.get('/chatroom', bearerMiddleware, chatHandler);
 ////route handlers
 function registerHandler(req, res) {
   //a new page with a form to sign-in or sign-up and OAuth options (frontend)
-  res.status(200).send('Sign-in Or Sign-up');
+  if (!req.user) {
+    res.status(200).send('Sign-in Or Sign-up');
+  }
+  else {
+    res.redirect('/home');
+  }
 }
 
 function homePageHandler(req, res) {
@@ -48,43 +51,51 @@ function homePageHandler(req, res) {
 }
 
 function profilePageHandler(req, res) {
-  const userInfo = req.user;
-  res.status(200).send(`**This is ${userInfo.user_name}'s Profile**\nWelcome, ${userInfo.user_name}!`);
-}
-//to see the reviews in my profile (added by other users)
-function reviewsHandler(req, res) {
-
+  //todo: show user's info in the profile page, including the articles and reviews (virtual joins)
+  const user = req.user;
+  const username = user.user_name;
+  User.read(username)
+    .then(userInfo => {
+      // console.log('user info>>>>>>\n', userInfo);
+      res.status(200).send(`**This is ${username}'s Profile**\nWelcome, ${username}!\nInfo:\n${JSON.stringify(userInfo)}`);
+    });
 }
 
 function postsHandler(req, res) {
   postmodule.read()
-    .then(data => {
+    .then(data=>{
       res.status(200).json(data);
     });
 }
 
 function addpostsHandler(req, res) {
-  let newpost = req.body;
+  let newpost=req.body;
+  const date = new Date(Date.now());
+  let current_date = date.toDateString();
+  newpost.date = current_date;
   postmodule.create(newpost)
-    .then(data => {
+    .then(data=>{
       res.status(201).json(data);
     });
 }
 
 function editpostsHandler(req, res) {
-  let username = req.user.user_name;
-  let idpost = req.params.idpost;
-  let newpost = req.body;
+  let username=req.user.user_name;
+  let idpost=req.params.idpost;
+  let newpost=req.body;
   User.read(username)
-    .then(data => {
+    .then(data=>{
       postmodule.readById(idpost)
-        .then(postdata => {
-          if (data.role === 'Administrators' || postdata[0].user_name === data.user_name) {
-            postmodule.update(idpost, newpost)
-              .then(data => {
+        .then(postdata=>{
+          if(postdata[0].user_name===data.user_name)
+          {
+            postmodule.update(idpost,newpost)
+              .then(data=>{
                 res.json(data);
               });
-          } else {
+          }
+          else
+          {
             res.send('you connot update the post');
           }
         });
@@ -92,20 +103,22 @@ function editpostsHandler(req, res) {
 }
 
 function deletepostsHandler(req, res) {
-  let username = req.user.user_name;
-  let idpost = req.params.idpost;
+  let username=req.user.user_name;
+  let idpost=req.params.idpost;
   User.read(username)
-    .then(data => {
-
+    .then(data=>{
       postmodule.readById(idpost)
-        .then(postdata => {
-          console.log('postdata', postdata[0].user_name);
-          if (data.role === 'Administrators' || postdata[0].user_name === data.user_name) {
+        .then(postdata=>{
+          console.log('postdata',postdata[0].user_name);
+          if(data.role ==='Administrators' || postdata[0].user_name===data.user_name)
+          {
             postmodule.delete(idpost)
-              .then(data => {
+              .then(data=>{
                 res.send('post deleted');
               });
-          } else {
+          }
+          else
+          {
             res.send('you connot delete');
           }
         });
@@ -115,37 +128,57 @@ function deletepostsHandler(req, res) {
 function chatHandler(req, res) {
 
 }
-//to add a review on another user's profile
-function addReviewHandler(req, res) {
-  // let userInfo = req.user;
-  res.send('user review');
-
-}
 
 function otherUserProfileHandler(req, res) {
-  req.user.capabilities = ['READ'];
+  req.user.capabilities = ['READ', 'ADD REVIEW'];
   let username = req.params.username;
-  // console.log(req.user);
+  // console.log(username);
   User.read(username)
     .then(otherUser => {
-      if (otherUser[0].user_name !== req.user.user_name) {
+      if(otherUser.user_name !== req.user.user_name) {
         let otherUserInfo = {
-          username: otherUser[0].user_name,
-          email: otherUser[0].email,
-          phone_number: otherUser[0].phoneNumber,
-          country: otherUser[0].country,
-          photo: otherUser[0].photo,
+          username: otherUser.user_name,
+          photo: otherUser.photo,
+          email: otherUser.email,
+          phone_number: otherUser.phoneNumber,
+          country: otherUser.country,
+          reviews: otherUser.reviews,
+          articles: otherUser.articles,
         };
-        console.log(otherUserInfo);
-        res.status(200).send(`Welcome to ${otherUser[0].user_name}'s Profile!\nUser Info:\n${JSON.stringify(otherUserInfo)}`);
-      } else {
+        res.status(200).send(`Welcome to ${otherUser.user_name}'s Profile!\nUser Info:\n${JSON.stringify(otherUserInfo)}`);
+      }
+      else {
         req.user.capabilities = ['READ', 'CREATE'];
         res.redirect('/profile');
       }
     });
 }
 
+function addArticleUser(req,res){
+  let id1 = req.user.user_name;
+  let id2 = req.params.idarticle;
+  User.articleByUser(id1,id2)
+    .then(data =>{
+      res.redirect('/profile');
+    });
+  
+}
+function readOne(req,res) {
+  let userName = req.user.user_name;
+  User.read(userName)
+    .then(data =>{
+      res.json(data);
+    });  
+}
 
+function deleteArticles(req,res) {
+  let id1 = req.user.user_name;
+  let id2 = req.params.idarticle;
+  User.deleteArticle(id1,id2)
+    .then(data =>{
+      res.redirect('/profile');
+    });
+}
 
 
 
