@@ -9,7 +9,7 @@ module.exports = (req, res, next) => {
         next('You Must Log-in');
         return;
     }
-    const bearerToken = req.headers.cookie.split('=').pop();
+    const bearerToken = req.cookies['remember token'];
     // console.log('Bearer Token>>>>>>>>>>>', bearerToken);
     users.verifyToken(bearerToken).then(userInfo => {
         req.user = userInfo;

@@ -13,6 +13,7 @@
   <div class="chat-container">
     <header class="chat-header">
       <h1>talkitover</h1>
+      <h2><%= name%></h2>
       <a href="index.html" class="btn">Leave Room</a>
     </header>
     <main class="chat-main">
@@ -26,54 +27,78 @@
     <div class="chat-form-container">
       <form id="chat-form">
         <input id="msg" type="text" placeholder="Enter Message" required autocomplete="off" />
-        <button class="btn"><i class="fas fa-paper-plane"></i> Send</button>
+        <button class="btn" type="submit"><i class="fas fa-paper-plane"></i> Send</button>
       </form>
     </div>
   </div>
   <script>
-    const lllroom = "<%=roomName%>";
+    const roomll = '<%= roomName%>';
+    const name = '<%= name%>';
+
   </script>
   <script src="/socket.io/socket.io.js"></script>
   <script>
-      console.log('hiiiiiiiiiiiiiiiiiii');
-const socket = io();
-const room = 'Private Chat Room';
-// console.log(client.request.headers.cookie);
-socket.emit('joinRoom', room);  //3. send the room name to the server
-socket.on('joinRoom', room => {
-  console.log(room);
-});  //7. print the room name 
-socket.on('disconnected', (msg) => {
-  console.log(msg);
-  outputmessage(msg);
+  const socket = io();
+const messageForm = document.getElementById('chat-form');
+const messageInput = document.getElementById('msg');
+const button = document.querySelector('button');
 
-});
-//8. to send the msg payload to the server
-// let messages = [];
-const chatform = document.getElementById('chat-form');
-socket.on('message', (message) =>{
-  console.log('message1',message);
-  outputmessage(message);
-});
-chatform.addEventListener('submit', (e)=> {
-  e.preventDefault();
-  const msg = e.target.elements.msg.value;
-  console.log(msg);
-  socket.emit('message', msg);
-});
-let date = new Date(Date.now());
-// var minutes = 1000 * 60;
-// var hours = minutes * 60;
-// var days = hours * 24;
-// var years = days * 365;
-// var date = new Date();
-// var time = date.getTime();
-// var year = Math.round(time / years);
+if (messageForm !== null) {
+  let numberOfUsers = 0;
+  const maxUsers = 2;
+  if (numberOfUsers < maxUsers) {
+  numberOfUsers++;
+  socket.emit('new-user', roomll, name);
+
+  messageForm.addEventListener('submit', e => {
+    e.preventDefault();
+    const message = messageInput.value;
+    outputmessage(`You: ${message}`);
+    socket.emit('send-chat-message', roomll, message);
+    messageInput.value = '';
+
+  });
+}
+}
+
+// socket.on('room-created', room => {
+//   const roomElement = document.createElement('div')
+//   roomElement.innerText = room
+//   const roomLink = document.createElement('a')
+//   roomLink.href = `/${room}`
+//   roomLink.innerText = 'join'
+//   roomContainer.append(roomElement)
+//   roomContainer.append(roomLink)
+// })
+// outputmessage('You joined');  
+
+socket.on('chat-message', data => {
+  outputmessage(`${data.name}: ${data.message}`)
+})
+
+socket.on('user-connected', name => {
+  outputmessage(`${name} connected`)
+})
+
+// socket.on('user-disconnected', name => {
+//   outputmessage(`${name} disconnected`)
+// })
+
+socket.on('disconnected', response => {
+  button.disabled = true;
+  outputmessage(response);
+})
+
 function outputmessage(message)
 {
+  var date = new Date;
+
+var minutes = date.getMinutes();
+var hour = date.getHours();
+if (minutes < 10) {minutes = `0${minutes}`}
   const div = document.createElement('div');
   div.classList.add('message');
-  div.innerHTML=`<p class="meta">${message}<span>${date}</span></p>
+  div.innerHTML=`<p class="meta"><span>${hour} : ${minutes} </span>${message}</p>
   <p class="text">
   </p>`;
   document.querySelector('.chat-messages').appendChild(div);

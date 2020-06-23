@@ -15,22 +15,18 @@ router.post('/assessment', registerHandler);
 router.get('/home', bearerMiddleware, homePageHandler);
 router.get('/profile', bearerMiddleware, profilePageHandler);
 router.get('/otherprofile/:username', bearerMiddleware, otherUserProfileHandler);
-
 //articles & quotes
 // router.get('quotes', quotesHandler);
 router.post('/user-articles/:idarticle', bearerMiddleware, addArticleUser);
 router.get('/user-articles', bearerMiddleware, readOne);
 router.delete('/user-articles/:idarticle', bearerMiddleware, deleteArticles);
-
 //posts
 router.get('/talkitoverposts', bearerMiddleware, postsHandler);
 router.post('/talkitoverposts', bearerMiddleware, aclMiddleware('POST'), addpostsHandler);
 router.put('/talkitoverposts/:idpost', bearerMiddleware, editpostsHandler);
 router.delete('/talkitoverposts/:idpost', bearerMiddleware, deletepostsHandler);
 router.get('/chatroom', bearerMiddleware, chatHandler);
-
 ////////////////////
-
 ////route handlers
 function registerHandler(req, res) {
     if (!req.user) {
@@ -54,22 +50,19 @@ function registerHandler(req, res) {
                 message: 'Whats on your mind? Select an issue below that best describes the reason you are here:?',
                 default: 'Jake',
                 choices: Q1,
-            }]);
+            }, ]);
             let Q2 = [
-
                 `1. No ${ans1.mentalissue.split(' ').splice(1).join(' ')}`,
                 `2. Mild ${ans1.mentalissue.split(' ').splice(1).join(' ')}`,
                 `3. Moderate ${ans1.mentalissue.split(' ').splice(1).join(' ')}`,
                 `4. Significant ${ans1.mentalissue.split(' ').splice(1).join(' ')}`,
             ];
-
-
             const ans2 = await inquirer.prompt([{
                 type: 'list',
                 name: 'Question2',
                 message: `Dealing with ${ans1.mentalissue.split(' ').splice(1).join(' ')} causes me:`,
                 choices: Q2,
-            }]);
+            }, ]);
             let Q3 = [
                 '1. Never',
                 '2. Once in a While',
@@ -81,7 +74,7 @@ function registerHandler(req, res) {
                 name: 'Question3',
                 message: `${ans1.mentalissue.split(' ').splice(1).join(' ')} impacts my work, school, or relationships:`,
                 choices: Q3,
-            }]);
+            }, ]);
             let Q4 = [
                 '1. Not Really Important',
                 '2. Somewhat Important',
@@ -93,7 +86,7 @@ function registerHandler(req, res) {
                 name: 'Question4',
                 message: `Learning how to better manage ${ans1.mentalissue.split(' ').splice(1).join(' ')} is:`,
                 choices: Q4,
-            }]);
+            }, ]);
             let Q5 = [
                 '1. Id rather not answer at this time',
                 '2. Ive sought professional help one time in the past.',
@@ -105,8 +98,7 @@ function registerHandler(req, res) {
                 name: 'Question5',
                 message: `Have you ever sought or received professional help (therapy, counseling, self-help, group support, or medication) for ${ans1.mentalissue} is:`,
                 choices: Q5,
-            }]);
-
+            }, ]);
             let Q6 = [
                 '1. I am not ready to change in the next 3 months',
                 '2. I am thinking about changing in the next 3 months',
@@ -119,7 +111,7 @@ function registerHandler(req, res) {
                 name: 'Question6',
                 message: `How ready are you to make a change in your life?:`,
                 choices: Q6,
-            }]);
+            }, ]);
             let Q7 = [
                 '1. Not at all',
                 '2. Several days',
@@ -131,7 +123,7 @@ function registerHandler(req, res) {
                 name: 'Question7',
                 message: `Over the last 2 weeks, how often have you been bothered by little interest or pleasure in doing things?:`,
                 choices: Q7,
-            }]);
+            }, ]);
             let Q8 = [
                 '1. Not at all',
                 '2. Several days',
@@ -139,12 +131,11 @@ function registerHandler(req, res) {
                 '4. Nearly every day',
             ];
             const ans8 = await inquirer.prompt([{
-
                 type: 'list',
                 name: 'Question8',
                 message: `Over the last 2 weeks, how often have you been bothered by thoughts that you would be better off dead or of hurting yourself in some way?:`,
                 choices: Q8,
-            }]);
+            }, ]);
             let Q9 = [
                 '1. Not difficult at all',
                 '2. Somewhat difficult',
@@ -156,7 +147,7 @@ function registerHandler(req, res) {
                 name: 'Question9',
                 message: `If you selected any problems, how difficult have these problems made it for you to do your work, take care of things at home, or get along with other people?:`,
                 choices: Q9,
-            }]);
+            }, ]);
             let Q10 = [
                 '1. Not at all',
                 '2. Several days',
@@ -168,7 +159,7 @@ function registerHandler(req, res) {
                 name: 'Question10',
                 message: `Over the last 2 weeks, how often have you been bothered by feeling nervous, anxious, or on edge?:`,
                 choices: Q10,
-            }]);
+            }, ]);
             var status;
             let result = {...ans1, ...ans2, ...ans3, ...ans4, ...ans5, ...ans6, ...ans7, ...ans8, ...ans9, ...ans10 };
             score = 3 + Q2.indexOf(result.Question2) + Q3.indexOf(result.Question3) + Q4.indexOf(result.Question4) + Q5.indexOf(result.Question5) + Q6.indexOf(result.Question6) + Q7.indexOf(result.Question7) +
@@ -177,31 +168,26 @@ function registerHandler(req, res) {
                 status = 'good';
                 return status;
             } else if (score >= 10 && score <= 20) {
-
                 status = 'need help';
                 return status;
             } else if (score > 20) {
                 status = 'extreme help';
                 return status;
             }
-
         })()
         .then((data) => {
-            let username = req.headers.cookie.split('=');
-            return jwt.verify(username[1], process.env.SECRET, async function(err, decoded) {
-                let decodedusername = decoded.user_name;
-                console.log('token username', decodedusername);
-                User.assmentcreate(decodedusername, data);
-
-                res.redirect('/profile');
-            });
-        })
-
-        .catch(console.error);
+                let username = req.headers.cookie.split('=');
+                return jwt.verify(username[1], process.env.SECRET, async function(err, decoded) {
+                    let decodedusername = decoded.user_name;
+                    console.log('token username', decodedusername);
+                    User.assmentcreate(decodedusername, data);
+                    res.redirect('/home');
+                }, );
+            })
+            .catch(console.error);
         //a new page with a form to sign-in or sign-up and OAuth options (frontend)
-
     } else {
-        res.redirect('/home');
+        res.redirect('/profile');
     }
 }
 
@@ -209,7 +195,6 @@ function homePageHandler(req, res) {
     //req.user --> user info
     const userInfo = req.user;
     res.status(200).send(`**This is Homepage**\nWelcome, ${userInfo.user_name}!`);
-
 }
 
 function profilePageHandler(req, res) {
@@ -281,9 +266,7 @@ function deletepostsHandler(req, res) {
         });
 }
 
-function chatHandler(req, res) {
-
-}
+function chatHandler(req, res) {}
 
 function otherUserProfileHandler(req, res) {
     req.user.capabilities = ['READ', 'ADD REVIEW'];
@@ -316,12 +299,10 @@ function addArticleUser(req, res) {
         .then(data => {
             res.redirect('/profile');
         });
-
 }
 
 function readOne(req, res) {
     let userName = req.user.user_name;
-    console.log('-------------------------------->', req.cookie);
     User.read(userName)
         .then(data => {
             res.json(data);
@@ -336,7 +317,4 @@ function deleteArticles(req, res) {
             res.redirect('/profile');
         });
 }
-
-
-
 module.exports = router;
