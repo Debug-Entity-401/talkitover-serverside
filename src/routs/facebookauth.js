@@ -6,6 +6,13 @@ const router = express.Router();
 
 router.get('/authorize', oauth, oauthHandler);
 
+/**
+ * 
+ * @param {object} req 
+  * it will set the token in the request and put an expiary date for the token
+ * @param {object} res
+ * it will send the token
+ */
 function oauthHandler(req, res) {
   let token = req.token;
   let day = 86400000;

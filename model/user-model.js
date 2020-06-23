@@ -5,6 +5,10 @@ class User {
   constructor(userSchema) {
     this.schama = userSchema;
   }
+  /**
+ * 
+ * @param {string} record  function that wil return the acssess token
+ */
   async read(record) {
     if (record) { //add populate for join
       let userRecord = await userSchema.findOne({ user_name: record }).populate('articles');

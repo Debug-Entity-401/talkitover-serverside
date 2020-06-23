@@ -13,6 +13,11 @@ route.put('/articles/:id', bearer, acl('UPDATE'), updateArt);
 route.delete('/articles/:id', bearer, acl('DELETE'), remove);
 route.post('/articles', bearer, acl('CREATE'), addArticle);
 
+/**
+ * 
+ * @param {object} req
+ * @param {object} res 
+ */
 function getAll(req, res, next) {
   let status = req.query.status;
   article.read(status)
