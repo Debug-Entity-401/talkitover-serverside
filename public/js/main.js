@@ -2,9 +2,11 @@
 // const chat = io.connect('http://localhost:3030/chat');
 // 'http://localhost'
 const socket = io();
-const room = 'Private Chat Room';
+// let messageForm = document.getElementById('chat-form');
+// const room = 'Private Chat Room';
 // console.log(client.request.headers.cookie);
-socket.emit('joinRoom', room);  //3. send the room name to the server
+
+// socket.emit('joinRoom', room);  //3. send the room name to the server
 socket.on('joinRoom', room => {
   console.log(room);
 });  //7. print the room name 
@@ -20,12 +22,36 @@ socket.on('message', (message) =>{
   console.log('message1',message);
   outputmessage(message);
 });
-chatform.addEventListener('submit', (e)=> {
-  e.preventDefault();
-  const msg = e.target.elements.msg.value;
-  console.log(msg);
-  socket.emit('message', msg);
+if (chatform != null) {
+  // const name = prompt('What is your name?');
+  outputmessage('You joined');
+  socket.emit('new-user', roomName, name);
+
+  chatform.addEventListener('submit', e => {
+    e.preventDefault();
+    const message = e.target.elements.msg.value;
+    outputmessage(`You: ${message}`);
+    socket.emit('message', roomName, message);
+    e.target.elements.msg.value = '';
+  });
+}
+socket.on('message', data => {
+  outputmessage(`${data.name}: ${data.message}`);
 });
+socket.on('user-connected', name => {
+  outputmessage(`${name} connected`);
+});
+
+socket.on('user-disconnected', name => {
+  outputmessage(`${name} disconnected`);
+});
+
+// chatform.addEventListener('submit', (e)=> {
+//   e.preventDefault();
+//   const msg = e.target.elements.msg.value;
+//   console.log(msg);
+//   socket.emit('message', msg);
+// });
 let date = new Date(Date.now());
 // var minutes = 1000 * 60;
 // var hours = minutes * 60;
