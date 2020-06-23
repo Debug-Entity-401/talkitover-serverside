@@ -7,6 +7,14 @@ const router = express.Router();
 
 router.post('/signup', signUpUser);
 
+/**
+ * 
+ * @param {object} req
+ * the req will send the information in the request body and it set the token in the request header
+ * @param {object} res 
+ * it will send back the token
+ * 
+ */
 function signUpUser(req, res, next) {
   let userInfo = req.body;
   users.saveHash(userInfo)
@@ -24,8 +32,6 @@ function signUpUser(req, res, next) {
             expires: new Date(Date.now() + day),
             httpOnly: true,
           });
-          // console.log('Header>>>>>>>>>', req.headers);
-          // res.status(201).redirect('/assessment');
           res.status(201).send(token);
         }).catch(err => {
           res.status(403).send('Invalid Signup! email is taken');

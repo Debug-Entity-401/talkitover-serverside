@@ -21,15 +21,14 @@ module.exports = async function authorize(req, res, next) {
     let [user, token] = await getUser(remoteUser);
     req.user = user;
     req.token = token;
-
     next();
   } catch (e) { next(`ERROR: ${e.message}`); }
-
 };
-
+/**
+ * 
+ * @param {string} code  function that wil return the acssess token
+ */
 async function exchangeCodeForToken(code) {
-
-
   let tokenResponse = await superagent.post(API_SERVER).send({
     code: code,
     client_id: CLIENT_ID,
@@ -46,6 +45,10 @@ async function exchangeCodeForToken(code) {
 }
 
 // axios  send asynchronous HTTP request to REST endpoints and perform CRUD operations, (do superagent work with different features)
+/**
+ * 
+ * @param {string} access_token function that will get us the user information 
+ */
 async function getFacebookUserData(access_token) {
   const { data } = await axios({
     url: remoteAPI,
@@ -58,7 +61,10 @@ async function getFacebookUserData(access_token) {
 
   return data;
 }
-
+/**
+ * 
+ * @param {Object} remoteUser 
+ */
 async function getUser(remoteUser) {
   let userRecord = {
     user_name: `${remoteUser.first_name} ${remoteUser.last_name}`,
@@ -66,7 +72,6 @@ async function getUser(remoteUser) {
     password: 'oauthpassword',
     role: 'ventor',
   };
-
   let user = await users.saveHash(userRecord);
   let token = users.getToken(user);
   console.log(user);

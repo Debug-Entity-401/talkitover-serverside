@@ -21,4 +21,3 @@ mongoose.connect(process.env.MONGODB_URI, mongooseOptions)
 
 ////starting the server
 server.start(process.env.PORT);
-
