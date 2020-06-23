@@ -1,17 +1,17 @@
 'use strict';
 ////require
 require('dotenv').config();
-const express = require('express'); 
+const express = require('express');
 const router = express.Router();
 const postmodule = require('../model/post-model');
 const User = require('../model/user-model');
 const bearerMiddleware = require('../middleware/bearer-auth');
 const aclMiddleware = require('../middleware/acl-middleware');
-const jwt=require('jsonwebtoken');
+const jwt = require('jsonwebtoken');
 ////////////////////
 ////routes
 //main, home, and profiles
-router.post('/assessment',registerHandler);
+router.post('/assessment', registerHandler);
 router.get('/home', bearerMiddleware, homePageHandler);
 router.get('/profile', bearerMiddleware, profilePageHandler);
 router.get('/otherprofile/:username', bearerMiddleware, otherUserProfileHandler);
@@ -25,8 +25,8 @@ router.delete('/user-articles/:idarticle', bearerMiddleware, deleteArticles);
 //posts
 router.get('/talkitoverposts', bearerMiddleware, postsHandler);
 router.post('/talkitoverposts', bearerMiddleware, aclMiddleware('POST'), addpostsHandler);
-router.put('/talkitoverposts/:idpost', bearerMiddleware, editpostsHandler);
-router.delete('/talkitoverposts/:idpost', bearerMiddleware, deletepostsHandler);
+router.put('/talkitoverposts/:idpost', bearerMiddleware,  editpostsHandler);
+router.delete('/talkitoverposts/:idpost', bearerMiddleware,  deletepostsHandler);
 router.get('/chatroom', bearerMiddleware, chatHandler);
 
 ////////////////////
@@ -118,13 +118,13 @@ function registerHandler(req, res) {
       ]);
 
       let Q6 =
-    [
-      '1. I am not ready to change in the next 3 months',
-      '2. I am thinking about changing in the next 3 months',
-      '3. I am thinking about changing in the next month',
-      '4. I am ready to make a change today',
-      '5. I have already made some progress',
-    ];
+        [
+          '1. I am not ready to change in the next 3 months',
+          '2. I am thinking about changing in the next 3 months',
+          '3. I am thinking about changing in the next month',
+          '4. I am ready to make a change today',
+          '5. I have already made some progress',
+        ];
       const ans6 = await inquirer.prompt([
         {
           type: 'list',
@@ -134,12 +134,12 @@ function registerHandler(req, res) {
         },
       ]);
       let Q7 =
-    [
-      '1. Not at all',
-      '2. Several days',
-      '3. More than half the days',
-      '4. Nearly every day',
-    ];
+        [
+          '1. Not at all',
+          '2. Several days',
+          '3. More than half the days',
+          '4. Nearly every day',
+        ];
       const ans7 = await inquirer.prompt([
         {
           type: 'list',
@@ -194,40 +194,37 @@ function registerHandler(req, res) {
       var status;
       let result = { ...ans1, ...ans2, ...ans3, ...ans4, ...ans5, ...ans6, ...ans7, ...ans8, ...ans9, ...ans10 };
       score = 3 + Q2.indexOf(result.Question2) + Q3.indexOf(result.Question3) + Q4.indexOf(result.Question4) + Q5.indexOf(result.Question5) + Q6.indexOf(result.Question6) + Q7.indexOf(result.Question7)
-    + Q8.indexOf(result.Question8) + Q9.indexOf(result.Question9) + Q10.indexOf(result.Question10);
-      if(score<10)
-      {
-        status='good';
+        + Q8.indexOf(result.Question8) + Q9.indexOf(result.Question9) + Q10.indexOf(result.Question10);
+      if (score < 10) {
+        status = 'good';
         return status;
       }
-      else if(score>=10 && score<=20)
-      {
+      else if (score >= 10 && score <= 20) {
 
-        status='need help';
+        status = 'need help';
         return status;
       }
-      else if(score>20)
-      {
-        status='extreme help';
+      else if (score > 20) {
+        status = 'extreme help';
         return status;
       }
-      
+
     })()
-      .then((data)=>{
-        let username=req.headers.cookie.split('=');
-        return jwt.verify(username[1], process.env.SECRET, async function(err, decoded) {      
+      .then((data) => {
+        let username = req.headers.cookie.split('=');
+        return jwt.verify(username[1], process.env.SECRET, async function (err, decoded) {
           let decodedusername = decoded.user_name;
-          console.log('token username',decodedusername);
-          User.assmentcreate(decodedusername,data);   
+          console.log('token username', decodedusername);
+          User.assmentcreate(decodedusername, data);
 
           res.redirect('/home');
         },
         );
       })
-  
+
       .catch(console.error);
     //a new page with a form to sign-in or sign-up and OAuth options (frontend)
-    
+
   }
 
   else {
@@ -254,39 +251,37 @@ function profilePageHandler(req, res) {
 
 function postsHandler(req, res) {
   postmodule.read()
-    .then(data=>{
+    .then(data => {
       res.status(200).json(data);
     });
 }
 
 function addpostsHandler(req, res) {
-  let newpost=req.body;
+  let newpost = req.body;
   const date = new Date(Date.now());
   let current_date = date.toDateString();
   newpost.date = current_date;
   postmodule.create(newpost)
-    .then(data=>{
+    .then(data => {
       res.status(201).json(data);
     });
 }
 
 function editpostsHandler(req, res) {
-  let username=req.user.user_name;
-  let idpost=req.params.idpost;
-  let newpost=req.body;
+  let username = req.user.user_name;
+  let idpost = req.params.idpost;
+  let newpost = req.body;
   User.read(username)
-    .then(data=>{
+    .then(data => {
       postmodule.readById(idpost)
-        .then(postdata=>{
-          if(postdata[0].user_name===data.user_name)
-          {
-            postmodule.update(idpost,newpost)
-              .then(data=>{
+        .then(postdata => {
+          if (postdata[0].user_name === data.user_name) {
+            postmodule.update(idpost, newpost)
+              .then(data => {
                 res.json(data);
               });
           }
-          else
-          {
+          else {
             res.send('you connot update the post');
           }
         });
@@ -294,22 +289,20 @@ function editpostsHandler(req, res) {
 }
 
 function deletepostsHandler(req, res) {
-  let username=req.user.user_name;
-  let idpost=req.params.idpost;
+  let username = req.user.user_name;
+  let idpost = req.params.idpost;
   User.read(username)
-    .then(data=>{
+    .then(data => {
       postmodule.readById(idpost)
-        .then(postdata=>{
-          console.log('postdata',postdata[0].user_name);
-          if(data.role ==='Administrators' || postdata[0].user_name===data.user_name)
-          {
+        .then(postdata => {
+          console.log('postdata', postdata[0].user_name);
+          if (data.role === 'Administrators' || postdata[0].user_name === data.user_name) {
             postmodule.delete(idpost)
-              .then(data=>{
+              .then(data => {
                 res.send('post deleted');
               });
           }
-          else
-          {
+          else {
             res.send('you connot delete');
           }
         });
@@ -326,7 +319,7 @@ function otherUserProfileHandler(req, res) {
   // console.log(username);
   User.read(username)
     .then(otherUser => {
-      if(otherUser.user_name !== req.user.user_name) {
+      if (otherUser.user_name !== req.user.user_name) {
         let otherUserInfo = {
           username: otherUser.user_name,
           photo: otherUser.photo,
@@ -345,32 +338,30 @@ function otherUserProfileHandler(req, res) {
     });
 }
 
-function addArticleUser(req,res){
+function addArticleUser(req, res) {
   let id1 = req.user.user_name;
   let id2 = req.params.idarticle;
-  User.articleByUser(id1,id2)
-    .then(data =>{
+  User.articleByUser(id1, id2)
+    .then(data => {
       res.redirect('/profile');
     });
-  
+
 }
-function readOne(req,res) {
+function readOne(req, res) {
   let userName = req.user.user_name;
   User.read(userName)
-    .then(data =>{
+    .then(data => {
       res.json(data);
-    });  
-}
-
-function deleteArticles(req,res) {
-  let id1 = req.user.user_name;
-  let id2 = req.params.idarticle;
-  User.deleteArticle(id1,id2)
-    .then(data =>{
-      res.redirect('/profile');
     });
 }
 
-
+function deleteArticles(req, res) {
+  let id1 = req.user.user_name;
+  let id2 = req.params.idarticle;
+  User.deleteArticle(id1, id2)
+    .then(data => {
+      res.redirect('/profile');
+    });
+}
 
 module.exports = router;

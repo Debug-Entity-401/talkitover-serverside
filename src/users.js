@@ -17,8 +17,10 @@ let role = {
 let users = {};
 
 users.saveHash = async function(record) {
+  console.log('record ===>',record);
   let dataRecord = await userread.read(record.user_name);
-  if (!dataRecord || !dataRecord[0]) { //add !dataRexord to avoid null problem
+  console.log('new   ===>',dataRecord);
+  if (dataRecord.length === 0) { //add !dataRexord to avoid null problem
     record.password = await bcrypt.hash(record.password, 5);
     return record;
   } else {
