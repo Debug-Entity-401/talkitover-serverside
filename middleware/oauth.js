@@ -1,5 +1,6 @@
 'use strict';
 const users = require('../src/users');
+const userModel = require('../model/user-model');
 const superagent = require('superagent');
 require('dotenv').config();
 const axios = require('axios').default;
@@ -63,11 +64,13 @@ async function getUser(remoteUser) {
     user_name: `${remoteUser.first_name} ${remoteUser.last_name}`,
     email: remoteUser.email,
     password: 'oauthpassword',
+    role: 'ventor',
   };
 
   let user = await users.saveHash(userRecord);
   let token = users.getToken(user);
   console.log(user);
+  await userModel.create(user);
 
   return [user, token];
 
