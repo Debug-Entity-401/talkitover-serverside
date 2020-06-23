@@ -7,7 +7,7 @@ const article = new Model(require('../model/schema/articlesschema'));
 const acl = require('../middleware/acl-middleware');
 const bearer = require('../middleware/bearer-auth');
 
-
+route.get('/admin',bearer,adminPage);
 route.get('/articles', bearer, acl('READ'), getAll);
 route.put('/articles/:id', bearer, acl('UPDATE'), updateArt);
 route.delete('/articles/:id', bearer, acl('DELETE'), remove);
@@ -18,6 +18,14 @@ route.post('/articles', bearer, acl('CREATE'), addArticle);
  * @param {object} req
  * @param {object} res 
  */
+function adminPage(req,res){
+  if(req.user.capabilities.length === 5){
+    res.send('You are in admin Page');
+  }
+  else console.error('error');
+}
+
+
 function getAll(req, res, next) {
   let status = req.query.status;
   article.read(status)
