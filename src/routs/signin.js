@@ -5,7 +5,13 @@ const basicAuth = require('../../middleware/BasicAuthentication');
 const router = express.Router();
 
 router.post('/signin', basicAuth, signinUser);
-
+/**
+ * 
+ * @param {object} req
+ * it will set the token in the request object 
+ * @param {object} res 
+ * it will set the token in a cookie then redirect to the home page
+ */
 function signinUser(req, res) {
   let token = req.token;
 

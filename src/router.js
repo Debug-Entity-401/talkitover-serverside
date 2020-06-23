@@ -28,6 +28,14 @@ router.delete('/talkitoverposts/:idpost', bearerMiddleware, deletepostsHandler);
 router.get('/chatroom', bearerMiddleware, chatHandler);
 ////////////////////
 ////route handlers
+
+/**
+ * 
+ * @param {object} req
+ * check if the req contains the user in the header 
+ * @param {object} res 
+ * return the status of the user
+ */
 function registerHandler(req, res) {
   if (!req.user) {
     var inquirer = require('inquirer');
@@ -191,12 +199,27 @@ function registerHandler(req, res) {
   }
 }
 
+
+/**
+ * 
+ * @param {object} req
+ * get the user object from the request  
+ * @param {object} res
+ * send a welcome message to the user 
+ */
 function homePageHandler(req, res) {
   //req.user --> user info
   const userInfo = req.user;
   res.status(200).send(`**This is Homepage**\nWelcome, ${userInfo.user_name}!`);
 }
 
+/**
+ * 
+ * @param {Object} req
+ * get the user object from the req 
+ * @param {Object} res 
+ * send the public user information from the database
+ */
 function profilePageHandler(req, res) {
   //todo: show user's info in the profile page, including the articles and reviews (virtual joins)
   const user = req.user;
@@ -208,13 +231,24 @@ function profilePageHandler(req, res) {
     });
 }
 
+/**
+ * 
+ * @param {object} res
+ *it will return all the posts 
+ */
 function postsHandler(req, res) {
   postmodule.read()
     .then(data => {
       res.status(200).json(data);
     });
 }
-
+/**
+ * 
+ * @param {Object} req 
+ * will get the post information from the request body
+ * @param {object} res 
+ * it will return the created post
+ */
 function addpostsHandler(req, res) {
   let newpost = req.body;
   const date = new Date(Date.now());
@@ -225,7 +259,13 @@ function addpostsHandler(req, res) {
       res.status(201).json(data);
     });
 }
-
+/**
+ * 
+ * @param {object} req
+ * it will get the username from the request object and the post if from the req param and get the post edits from the request body
+ * @param {object} res 
+ * it will send the updated post
+ */
 function editpostsHandler(req, res) {
   let username = req.user.user_name;
   let idpost = req.params.idpost;
@@ -245,7 +285,13 @@ function editpostsHandler(req, res) {
         });
     });
 }
-
+/**
+ * 
+ * @param {object} req
+ * it will get the username from the request object and the post if from the req param 
+ * @param {object} res 
+ * it will return a message if the post is deleted
+ */
 function deletepostsHandler(req, res) {
   let username = req.user.user_name;
   let idpost = req.params.idpost;
@@ -266,8 +312,16 @@ function deletepostsHandler(req, res) {
     });
 }
 
-function chatHandler(req, res) {}
+function chatHandler(req, res) {
 
+}
+/**
+ * 
+ * @param {object} req
+ * it will get the username from the request params and it will edit the user capablity in the request object
+ * @param {object} res 
+ * it will show the  public user profile
+ */
 function otherUserProfileHandler(req, res) {
   req.user.capabilities = ['READ', 'ADD REVIEW'];
   let username = req.params.username;
@@ -292,6 +346,13 @@ function otherUserProfileHandler(req, res) {
     });
 }
 
+/**
+ * 
+ * @param {object} req 
+ * it will get the username from the request object and get article id from request params
+ * @param {object} res 
+ * it will redirect to the profile page
+ */
 function addArticleUser(req, res) {
   let id1 = req.user.user_name;
   let id2 = req.params.idarticle;
@@ -301,6 +362,16 @@ function addArticleUser(req, res) {
     });
 }
 
+
+/**
+ * 
+ * @param {Object} req 
+ * it will get the username from the request object  
+ * @param {Object} res 
+ * it will return the user details including the saved article 
+ */
+
+
 function readOne(req, res) {
   let userName = req.user.user_name;
   User.read(userName)
@@ -308,6 +379,13 @@ function readOne(req, res) {
       res.json(data);
     });
 }
+/**
+ * 
+ * @param {Object} req 
+ * it will get the username from the request object and articleid from the params  
+ * @param {Object} res 
+ * it will redirect to the user profile
+ */
 
 function deleteArticles(req, res) {
   let id1 = req.user.user_name;

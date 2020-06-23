@@ -1,11 +1,7 @@
 'use strict';
-
-
-
 // const express = require('express');
 // const app = express();
 // const http = require('http').createServer(app);
-
 let io = require('socket.io')(3030);
 const chatServer = io.of('/chat'); //1. create a namespace
 
