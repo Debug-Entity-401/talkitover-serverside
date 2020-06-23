@@ -13,6 +13,7 @@
   <div class="chat-container">
     <header class="chat-header">
       <h1>talkitover</h1>
+      <h2><%= name%></h2>
       <a href="index.html" class="btn">Leave Room</a>
     </header>
     <main class="chat-main">
@@ -81,9 +82,15 @@ socket.on('user-disconnected', name => {
 
 function outputmessage(message)
 {
+  var date = new Date;
+date.setTime(result_from_Date_getTime);
+
+var minutes = date.getMinutes();
+var hour = date.getHours();
+
   const div = document.createElement('div');
   div.classList.add('message');
-  div.innerHTML=`<p class="meta">${message}<span>12:00</span></p>
+  div.innerHTML=`<p class="meta"><span>${hour} : ${minutes}</span>${message}</p>
   <p class="text">
   </p>`;
   document.querySelector('.chat-messages').appendChild(div);
