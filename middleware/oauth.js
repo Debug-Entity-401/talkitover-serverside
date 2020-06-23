@@ -29,7 +29,6 @@ module.exports = async function authorize(req, res, next) {
  * @param {string} code  function that wil return the acssess token
  */
 async function exchangeCodeForToken(code) {
-  console.log(code);
   let tokenResponse = await superagent.post(API_SERVER).send({
     code: code,
     client_id: CLIENT_ID,

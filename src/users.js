@@ -23,15 +23,15 @@ let users = {};
  * it will encrypt for te user password
  */
 users.saveHash = async function(record) {
-  console.log('record ===>',record);
-  let dataRecord = await userread.read(record.user_name);
-  console.log('new   ===>',dataRecord);
-  if (dataRecord.length === 0) { //add !dataRexord to avoid null problem
+  let dataRexord = await userread.readUser(record.user_name);
+  //   console.log('------------------------>', dataRexord);
+  if (!dataRexord[0]) {
     record.password = await bcrypt.hash(record.password, 5);
     return record;
   } else {
     console.error('it is already exists');
-    return dataRecord;
+    return dataRexord;
+
   }
 };
 /**

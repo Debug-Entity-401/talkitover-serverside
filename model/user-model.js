@@ -5,6 +5,15 @@ class User {
   constructor(userSchema) {
     this.schama = userSchema;
   }
+  async readUser(record) {
+    if (record) {
+      let senc = await userSchema.find({ user_name: record });
+      return senc || null;
+    } else {
+      return await userSchema.find({});
+    }
+  }
+
   /**
  * 
  * @param {string} record  function that wil return the acssess token
@@ -21,21 +30,20 @@ class User {
     let newUser = new userSchema(record);
     return await newUser.save(record);
   }
-  async assmentcreate(username,data)
-  {
-    return await userSchema.findOneAndUpdate({ user_name:username,status:data});
+  async assmentcreate(username, data) {
+    return await userSchema.findOneAndUpdate({ user_name: username, status: data });
 
   }
 
   async addReview(username, review) {
-    return await userSchema.findOneAndUpdate({user_name: username}, {$push: {reviews: review}}, {new: true});
+    return await userSchema.findOneAndUpdate({ user_name: username }, { $push: { reviews: review } }, { new: true });
   }
 
   async deleteReview(username, id) {
-    return userSchema.findOne({user_name: username}, {reviews: {$elemMatch: {_id:id}}})
+    return userSchema.findOne({ user_name: username }, { reviews: { $elemMatch: { _id: id } } })
       .then(async record => {
         console.log('inside then>>>>>>>>>>', record.reviews[0]);
-        return await userSchema.findOneAndUpdate({user_name: username}, {$pull: {reviews: record.reviews[0]}}, {new: true});
+        return await userSchema.findOneAndUpdate({ user_name: username }, { $pull: { reviews: record.reviews[0] } }, { new: true });
       });
   }
 

@@ -32,8 +32,7 @@ function addReviewHandler(req, res) {
       .then(review => {
         res.redirect(`/otherprofile/${reviewdUser}`);
       });
-  }
-  else {
+  } else {
     res.send('You cannot review yourself..');
   }
 }

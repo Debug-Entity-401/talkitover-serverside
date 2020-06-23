@@ -32,8 +32,6 @@ function signUpUser(req, res, next) {
             expires: new Date(Date.now() + day),
             httpOnly: true,
           });
-          // console.log('Header>>>>>>>>>', req.headers);
-          // res.status(201).redirect('/assessment');
           res.status(201).send(token);
         }).catch(err => {
           res.status(403).send('Invalid Signup! email is taken');
