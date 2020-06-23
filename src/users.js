@@ -17,13 +17,15 @@ let role = {
 let users = {};
 
 users.saveHash = async function(record) {
-  let dataRecord = await userread.read(record.user_name);
-  if (!dataRecord || !dataRecord[0]) { //add !dataRexord to avoid null problem
+  let dataRexord = await userread.readUser(record.user_name);
+  //   console.log('------------------------>', dataRexord);
+  if (!dataRexord[0]) {
     record.password = await bcrypt.hash(record.password, 5);
     return record;
   } else {
     console.error('it is already exists');
-    return dataRecord;
+    return dataRexord;
+
   }
 };
 users.authenticateBasic = async function(user, pass) {
