@@ -10,14 +10,14 @@ const server = require('./lib/server');
 
 ////connecting to mongoDB
 const mongooseOptions = {
-  useUnifiedTopology: true,
-  useNewUrlParser: true,
-  useCreateIndex: true,
-  useFindAndModify: false,
+    useUnifiedTopology: true,
+    useNewUrlParser: true,
+    useCreateIndex: true,
+    useFindAndModify: false,
 };
 
 mongoose.connect(process.env.MONGODB_URI, mongooseOptions)
-  .then(console.log('\n**mongoDB connected**\n'));
+    .then(console.log('\n**mongoDB connected**\n'));
 
 ////starting the server
 server.start(process.env.PORT);
