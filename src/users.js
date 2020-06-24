@@ -4,6 +4,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const userread = require('../model/user-model');
 
+
 const SECRET = process.env.SECRET;
 
 let role = {
@@ -16,28 +17,50 @@ let role = {
 
 let users = {};
 
+/**
+ * 
+ * @param {Object} record 
+ * it will encrypt for te user password
+ */
 users.saveHash = async function(record) {
-  let dataRecord = await userread.read(record.user_name);
-  if (!dataRecord || !dataRecord[0]) { //add !dataRexord to avoid null problem
+  let dataRexord = await userread.readUser(record.user_name);
+  //   console.log('------------------------>', dataRexord);
+  if (!dataRexord[0]) {
     record.password = await bcrypt.hash(record.password, 5);
     return record;
   } else {
     console.error('it is already exists');
-    return dataRecord;
+    return dataRexord;
+
   }
 };
+/**
+ * 
+ * @param {string} user 
+ * @param {string} pass
+ * it will compare the user  hashd password that exist the with the inserted password
+ */
 users.authenticateBasic = async function(user, pass) {
   const dataRexord = await userread.read(user);
   let valid = await bcrypt.compare(pass, dataRexord.password);
   return valid ? dataRexord : Promise.reject();
 };
-
+/**
+ * 
+ * @param {Object} user
+ * it will genrate a user token from jwt  
+ */
 users.getToken = function(user) {
   let token = jwt.sign({ user_name: user.user_name, capabilities: role[user.role] }, SECRET);
   return token;
 
 };
 
+/**
+ * 
+ * @param {string} token
+ *  it will virify the user token belong to this user
+ */
 users.verifyToken = async function(token) {
 
   return jwt.verify(token, SECRET, async function(err, decoded) {
