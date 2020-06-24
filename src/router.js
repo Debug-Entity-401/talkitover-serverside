@@ -244,6 +244,7 @@ function profilePageHandler(req, res) {
         country: data.country,
         reviews: data.reviews,
         articles: data.articles,
+        status: data.status,
       };
       res.status(200).send(`**This is ${username}'s Profile**\nWelcome, ${username}!\nInfo:\n${JSON.stringify(userInfo)}`);
     });
