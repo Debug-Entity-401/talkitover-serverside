@@ -174,12 +174,18 @@ function registerHandler(req, res) {
       score = 3 + Q2.indexOf(result.Question2) + Q3.indexOf(result.Question3) + Q4.indexOf(result.Question4) + Q5.indexOf(result.Question5);
       if (score < 5) {
         status = 'good';
+        console.log('\n---------------------------\n score : ', score);
+        console.log(' status : ', status, '\n---------------------------\n');
         return status;
-      } else if (score >= 10 && score <= 15) {
+      } else if (score >= 5 && score <= 10) {
         status = 'need help';
+        console.log('\n---------------------------\n score : ', score);
+        console.log(' status : ', status, '\n---------------------------\n');
         return status;
-      } else if (score > 15) {
+      } else if (score > 10) {
         status = 'extreme help';
+        console.log('\n---------------------------\n score : ', score);
+        console.log(' status : ', status, '\n---------------------------\n');
         return status;
       }
     })()
