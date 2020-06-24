@@ -1,5 +1,8 @@
 'use strict';
-
+/**
+ * basic variable
+ * @type {string}
+ */
 const base64 = require('base-64');
 const users = require('../src/users');
 
@@ -8,7 +11,6 @@ module.exports = (req, res, next) => {
     next('Invalid Login');
   } else {
     const basic = req.headers.authorization.split(' ').pop();
-    // console.log('basic>>>>>>>>>', basic);
     const [user, pass] = base64.decode(basic).split(':');
     users.authenticateBasic(user, pass)
       .then(validator => {
