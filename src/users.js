@@ -40,7 +40,7 @@ users.saveHash = async function(record) {
  * it will compare the user  hashd password that exist the with the inserted password
  */
 users.authenticateBasic = async function(user, pass) {
-  const dataRexord = await userread.readUser(user);
+  const dataRexord = await userread.read(user);
   let valid = await bcrypt.compare(pass, dataRexord.password);
   return valid ? dataRexord : Promise.reject();
 };
