@@ -4,7 +4,6 @@ const user = mongoose.Schema({
   user_name: { type: String, required: true },
   password: { type: String, required: true },
   email: { type: String, required: true },
-  phonNumber: { type: String },
   country: { type: String },
   photo: { type: String },
   status:{type:String},

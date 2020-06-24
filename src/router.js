@@ -104,7 +104,7 @@ function registerHandler(req, res) {
       const ans5 = await inquirer.prompt([{
         type: 'list',
         name: 'Question5',
-        message: `Have you ever sought or received professional help (therapy, counseling, self-help, group support, or medication) for ${ans1.mentalissue} is:`,
+        message: `Have you ever sought or received professional help (therapy, counseling, self-help, group support, or medication) for ${ans1.mentalissue.split(' ').splice(1).join(' ')} is:`,
         choices: Q5,
       } ]);
       let Q6 = [
@@ -225,11 +225,17 @@ function profilePageHandler(req, res) {
   const user = req.user;
   const username = user.user_name;
   User.read(username)
-    .then(userInfo => {
-      // console.log('user info>>>>>>\n', userInfo);
+    .then(data => {
+      let userInfo = {
+        username: otherUser.user_name,
+        photo: otherUser.photo,
+        email: otherUser.email,
+        country: otherUser.country,
+        reviews: otherUser.reviews,
+        articles: otherUser.articles,
+      };
       res.status(200).send(`**This is ${username}'s Profile**\nWelcome, ${username}!\nInfo:\n${JSON.stringify(userInfo)}`);
     });
-}
 
 /**
  * 
@@ -333,7 +339,6 @@ function otherUserProfileHandler(req, res) {
           username: otherUser.user_name,
           photo: otherUser.photo,
           email: otherUser.email,
-          phone_number: otherUser.phoneNumber,
           country: otherUser.country,
           reviews: otherUser.reviews,
           articles: otherUser.articles,

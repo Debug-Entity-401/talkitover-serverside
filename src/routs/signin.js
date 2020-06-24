@@ -20,7 +20,8 @@ function signinUser(req, res) {
     expires: new Date(Date.now() + day),
     httpOnly: true,
   });
-  res.status(201).send(token);
+  res.redirect('/home');
+  // res.status(201).send(token);
 }
 
 module.exports = router;
