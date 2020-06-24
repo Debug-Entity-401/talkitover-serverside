@@ -38,7 +38,6 @@ async function exchangeCodeForToken(code) {
   }).catch(e => console.log(e.message));
 
   let access_token = tokenResponse.body.access_token;
-  console.log(access_token);
 
   return access_token;
 
@@ -74,9 +73,5 @@ async function getUser(remoteUser) {
   };
   let user = await users.saveHash(userRecord);
   let token = users.getToken(user);
-  console.log(user);
-  await userModel.create(user);
-
   return [user, token];
-
 }

@@ -10,7 +10,7 @@ const SECRET = process.env.SECRET;
 let role = {
   Regular_users: ['READ'],
   Listener: ['READ', 'CREATE'],
-  ventor: ['READ', 'CREATE', 'POST'], // add a new capability to the ventor to create their posts
+  ventor: ['READ', 'CREATE', 'POST'],
   Editors: ['READ', 'CREATE', 'UPDATE'],
   Administrators: ['READ', 'CREATE', 'UPDATE', 'DELETE', 'DELETE REVIEW'],
 };
@@ -24,7 +24,6 @@ let users = {};
  */
 users.saveHash = async function(record) {
   let dataRexord = await userread.readUser(record.user_name);
-  //   console.log('------------------------>', dataRexord);
   if (!dataRexord[0]) {
     record.password = await bcrypt.hash(record.password, 5);
     return record;
@@ -51,7 +50,7 @@ users.authenticateBasic = async function(user, pass) {
  * it will genrate a user token from jwt  
  */
 users.getToken = function(user) {
-  let token = jwt.sign({ user_name: user.user_name, capabilities: role[user.role] }, SECRET);
+  let token = jwt.sign({ user_name: user.user_name, capabilities: role[user.role],role: user.role }, SECRET);
   return token;
 
 };
