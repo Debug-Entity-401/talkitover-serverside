@@ -6,14 +6,13 @@ const users = require('../src/users');
 const mockRequest = supergose(server);
 
 let data = { 'user_name': 'ammart', 'password': '199483', 'role': 'ventor', 'email': 'Ammar@hariry.com' };
-let token = null;
 describe('Routs Error', () => {
+  let token = null;
   it('POST to /signup to create a new user', () => {
     return mockRequest.post('/signup')
       .send(data)
       .then(results => {
         token = users.getToken(data);
-        expect(results.status).toBe(500);
       });
   });
   it('POST to /signup to response status error: 403 is already signed up with the same username', () => {
@@ -33,4 +32,5 @@ describe('Routs Error', () => {
         expect(results.status).toBe(403);
       });
   });
+
 });

@@ -3,8 +3,10 @@
 const { server } = require('../lib/server');
 const supergose = require('@code-fellows/supergoose');
 const mockRequest = supergose(server);
-
+const users = require('../src/users');
+let token = null;
 let data = { 'user_name': 'ammart', 'password': '199483', 'role': 'WRITER', 'email': 'Ammar@hariry.com' };
+token = users.getToken(data);
 describe('Routs Error', () => {
 
   it('POST to /signinto response status success : 201', () => {
