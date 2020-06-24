@@ -5,6 +5,8 @@ const express = require('express');
 const router = express.Router();
 const postmodule = require('../model/post-model');
 const User = require('../model/user-model');
+const Model = require('../model/general-model');
+const articles = new Model(require('../model/schema/articlesschema'));
 const bearerMiddleware = require('../middleware/bearer-auth');
 const aclMiddleware = require('../middleware/acl-middleware');
 const jwt = require('jsonwebtoken');
@@ -205,9 +207,21 @@ function registerHandler(req, res) {
  * send a welcome message to the user 
  */
 function homePageHandler(req, res) {
-  //req.user --> user info
   const userInfo = req.user;
-  res.status(200).send(`**This is Homepage**\nWelcome, ${userInfo.user_name}!`);
+  let status = 'new';
+  let newArticlesArray = [];
+  articles.read(status)
+    .then(newArticles => {
+      newArticles.forEach(article => {
+        let articleObj = {
+          title: article.title,
+          description: article.text,
+          url: article.url,
+        };
+        newArticlesArray.push(articleObj);
+      }) ;
+      res.status(200).send(`**This is Homepage**\nWelcome, ${userInfo.user_name}!\n\nLatest Articles:\n${JSON.stringify(newArticlesArray)}`);
+    });
 }
 
 /**
