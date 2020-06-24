@@ -14,7 +14,7 @@
     <header class="chat-header">
       <h1>talkitover</h1>
       <h2><%= name%></h2>
-      <a href="index.html" class="btn">Leave Room</a>
+      <a href="/" class="btn">Leave Room</a>
     </header>
     <main class="chat-main">
       <div class="chat-messages">
@@ -68,7 +68,9 @@ socket.on('chat-message', data => {
 socket.on('user-connected', name => {
   outputmessage(`${name} connected`)
 });
-
+socket.on('user-disconnected', response => {
+  outputmessage(response);
+});
 socket.on('disconnected', response => {
   button.disabled = true;
   outputmessage(response);
