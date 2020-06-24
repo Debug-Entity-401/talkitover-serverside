@@ -61,33 +61,18 @@ if (messageForm !== null) {
 }
 }
 
-// socket.on('room-created', room => {
-//   const roomElement = document.createElement('div')
-//   roomElement.innerText = room
-//   const roomLink = document.createElement('a')
-//   roomLink.href = `/${room}`
-//   roomLink.innerText = 'join'
-//   roomContainer.append(roomElement)
-//   roomContainer.append(roomLink)
-// })
-// outputmessage('You joined');  
-
 socket.on('chat-message', data => {
   outputmessage(`${data.name}: ${data.message}`)
-})
+});
 
 socket.on('user-connected', name => {
   outputmessage(`${name} connected`)
-})
-
-// socket.on('user-disconnected', name => {
-//   outputmessage(`${name} disconnected`)
-// })
+});
 
 socket.on('disconnected', response => {
   button.disabled = true;
   outputmessage(response);
-})
+});
 
 function outputmessage(message)
 {

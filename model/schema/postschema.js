@@ -3,7 +3,7 @@
 const mongoose = require('mongoose');
 
 const posts = mongoose.Schema({
-  user_name:{type:String,required:true},
+  user_name:{type:String, default: 'Anonymous'},
   availability:{type:String,required:true},
   date:{type:String,required:true},
   description:{type:String,required:true},

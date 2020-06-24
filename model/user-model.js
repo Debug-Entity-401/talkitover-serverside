@@ -42,16 +42,13 @@ class User {
   async deleteReview(username, id) {
     return userSchema.findOne({ user_name: username }, { reviews: { $elemMatch: { _id: id } } })
       .then(async record => {
-        console.log('inside then>>>>>>>>>>', record.reviews[0]);
         return await userSchema.findOneAndUpdate({ user_name: username }, { $pull: { reviews: record.reviews[0] } }, { new: true });
       });
   }
-
   //add two functions
   async articleByUser(id1, id2) {
     return await userSchema.findOneAndUpdate({ user_name: id1 }, { $push: { articles: id2 } }, { new: true });
   }
-
   async deleteArticle(id1, id2) {
     return await userSchema.findOneAndUpdate({ user_name: id1 }, { $pull: { articles: id2 } }, { new: true });
   }

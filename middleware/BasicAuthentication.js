@@ -11,10 +11,10 @@ module.exports = (req, res, next) => {
     next('Invalid Login');
   } else {
     const basic = req.headers.authorization.split(' ').pop();
-    //         console.log('basic>>>>>>>>>', req.headers.authorization);
     const [user, pass] = base64.decode(basic).split(':');
     users.authenticateBasic(user, pass)
       .then(validator => {
+
         req.token = users.getToken(validator);
         next();
       }).catch(err => {

@@ -2,11 +2,9 @@
 
 const express = require('express');
 const router = express.Router();
-// const reviews_schema = require('../../model/schema/reviews-schema');
 const acl = require('../../middleware/acl-middleware');
 const bearer = require('../../middleware/bearer-auth');
 const userModel = require('../../model/user-model');
-
 router.post('/addreview/:username', bearer, acl('CREATE'), addReviewHandler);
 router.delete('/deletereview/:username/:id', bearer, acl('DELETE REVIEW'), removeReview);
 
@@ -50,8 +48,5 @@ function removeReview(req, res) {
   userModel.deleteReview(username, review_id)
     .then(res.redirect(`/otherprofile/${username}`));
 }
-
-
-
 
 module.exports = router;

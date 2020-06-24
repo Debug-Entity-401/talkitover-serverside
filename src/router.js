@@ -9,14 +9,13 @@ const bearerMiddleware = require('../middleware/bearer-auth');
 const aclMiddleware = require('../middleware/acl-middleware');
 const jwt = require('jsonwebtoken');
 ////////////////////
-////routes
 //main, home, and profiles
 router.post('/assessment', registerHandler);
 router.get('/home', bearerMiddleware, homePageHandler);
 router.get('/profile', bearerMiddleware, profilePageHandler);
 router.get('/otherprofile/:username', bearerMiddleware, otherUserProfileHandler);
 //articles & quotes
-// router.get('quotes', quotesHandler);
+
 router.post('/user-articles/:idarticle', bearerMiddleware, addArticleUser);
 router.get('/user-articles', bearerMiddleware, readOne);
 router.delete('/user-articles/:idarticle', bearerMiddleware, deleteArticles);
@@ -25,9 +24,8 @@ router.get('/talkitoverposts', bearerMiddleware, postsHandler);
 router.post('/talkitoverposts', bearerMiddleware, aclMiddleware('POST'), addpostsHandler);
 router.put('/talkitoverposts/:idpost', bearerMiddleware, editpostsHandler);
 router.delete('/talkitoverposts/:idpost', bearerMiddleware, deletepostsHandler);
-router.get('/chatroom', bearerMiddleware, chatHandler);
+
 ////////////////////
-////route handlers
 
 /**
  * 
@@ -184,10 +182,9 @@ function registerHandler(req, res) {
       }
     })()
       .then((data) => {
-        let username = req.headers.cookie.split('=');
-        return jwt.verify(username[1], process.env.SECRET, async function(err, decoded) {
+        let username = req.cookies['remember token'];
+        return jwt.verify(username, process.env.SECRET, async function (err, decoded) {
           let decodedusername = decoded.user_name;
-          console.log('token username', decodedusername);
           User.assmentcreate(decodedusername, data);
           res.redirect('/home');
         } );
@@ -226,7 +223,6 @@ function profilePageHandler(req, res) {
   const username = user.user_name;
   User.read(username)
     .then(userInfo => {
-      // console.log('user info>>>>>>\n', userInfo);
       res.status(200).send(`**This is ${username}'s Profile**\nWelcome, ${username}!\nInfo:\n${JSON.stringify(userInfo)}`);
     });
 }
@@ -299,7 +295,6 @@ function deletepostsHandler(req, res) {
     .then(data => {
       postmodule.readById(idpost)
         .then(postdata => {
-          console.log('postdata', postdata[0].user_name);
           if (data.role === 'Administrators' || postdata[0].user_name === data.user_name) {
             postmodule.delete(idpost)
               .then(data => {
@@ -312,9 +307,7 @@ function deletepostsHandler(req, res) {
     });
 }
 
-function chatHandler(req, res) {
 
-}
 /**
  * 
  * @param {object} req
@@ -325,7 +318,6 @@ function chatHandler(req, res) {
 function otherUserProfileHandler(req, res) {
   req.user.capabilities = ['READ', 'ADD REVIEW'];
   let username = req.params.username;
-  // console.log(username);
   User.read(username)
     .then(otherUser => {
       if (otherUser.user_name !== req.user.user_name) {
