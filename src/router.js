@@ -60,10 +60,10 @@ function registerHandler(req, res) {
         choices: Q1,
       } ]);
       let Q2 = [
-        `1. No ${ans1.mentalissue.split(' ').splice(1).join(' ')}`,
-        `2. Mild ${ans1.mentalissue.split(' ').splice(1).join(' ')}`,
-        `3. Moderate ${ans1.mentalissue.split(' ').splice(1).join(' ')}`,
-        `4. Significant ${ans1.mentalissue.split(' ').splice(1).join(' ')}`,
+        `1. No Struggle`,
+        `2. Mild Struggle`,
+        `3. Moderate Struggle`,
+        `4. Significant Struggle`,
       ];
       const ans2 = await inquirer.prompt([{
         type: 'list',
