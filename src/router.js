@@ -249,7 +249,6 @@ function profilePageHandler(req, res) {
         email: data.email,
         country: data.country,
         reviews: data.reviews,
-        articles: data.articles,
         status: data.status,
       };
       res.status(200).send(`**This is ${username}'s Profile**\nWelcome, ${username}!\nInfo:\n${JSON.stringify(userInfo)}`);
@@ -355,7 +354,6 @@ function otherUserProfileHandler(req, res) {
           email: otherUser.email,
           country: otherUser.country,
           reviews: otherUser.reviews,
-          articles: otherUser.articles,
         };
         res.status(200).send(`Welcome to ${otherUser.user_name}'s Profile!\nUser Info:\n${JSON.stringify(otherUserInfo)}`);
       } else {
