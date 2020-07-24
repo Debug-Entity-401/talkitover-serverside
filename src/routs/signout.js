@@ -21,7 +21,7 @@ function signoutHandler(req, res) {
       expires: new Date(Date.now()),
       httpOnly: true,
     });
-    res.redirect('/');
+    
   }
 }
 

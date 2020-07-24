@@ -32,7 +32,7 @@ function signUpUser(req, res, next) {
             expires: new Date(Date.now() + day),
             httpOnly: true,
           });
-          res.status(201).redirect('/home');
+          res.status(201).send(token);
         }).catch(err => {
           res.status(403).send('Invalid Signup! email is taken');
         });

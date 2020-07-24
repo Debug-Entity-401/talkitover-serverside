@@ -20,6 +20,6 @@ function oauthHandler(req, res) {
     expires: new Date(Date.now() + day),
     httpOnly: true,
   });
-  res.status(200).redirect('/');
+  res.status(200).send(token);
 }
 module.exports = router;
