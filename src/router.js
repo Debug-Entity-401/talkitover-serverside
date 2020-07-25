@@ -109,98 +109,100 @@ function registerHandler(req, res) {
     //     message: `Have you ever sought or received professional help (therapy, counseling, self-help, group support, or medication) for ${ans1.mentalissue.split(' ').splice(1).join(' ')} is:`,
     //     choices: Q5,
     //   } ]);
-      // let Q6 = [
-      //   '1. I am not ready to change in the next 3 months',
-      //   '2. I am thinking about changing in the next 3 months',
-      //   '3. I am thinking about changing in the next month',
-      //   '4. I am ready to make a change today',
-      //   '5. I have already made some progress',
-      // ];
-      // const ans6 = await inquirer.prompt([{
-      //   type: 'list',
-      //   name: 'Question6',
-      //   message: `How ready are you to make a change in your life?:`,
-      //   choices: Q6,
-      // } ]);
-      // let Q7 = [
-      //   '1. Not at all',
-      //   '2. Several days',
-      //   '3. More than half the days',
-      //   '4. Nearly every day',
-      // ];
-      // const ans7 = await inquirer.prompt([{
-      //   type: 'list',
-      //   name: 'Question7',
-      //   message: `Over the last 2 weeks, how often have you been bothered by little interest or pleasure in doing things?:`,
-      //   choices: Q7,
-      // } ]);
-      // let Q8 = [
-      //   '1. Not at all',
-      //   '2. Several days',
-      //   '3. More than half the days',
-      //   '4. Nearly every day',
-      // ];
-      // const ans8 = await inquirer.prompt([{
-      //   type: 'list',
-      //   name: 'Question8',
-      //   message: `Over the last 2 weeks, how often have you been bothered by thoughts that you would be better off dead or of hurting yourself in some way?:`,
-      //   choices: Q8,
-      // } ]);
-      // let Q9 = [
-      //   '1. Not difficult at all',
-      //   '2. Somewhat difficult',
-      //   '3. Very difficult',
-      //   '4. Extremely difficult',
-      // ];
-      // const ans9 = await inquirer.prompt([{
-      //   type: 'list',
-      //   name: 'Question9',
-      //   message: `If you selected any problems, how difficult have these problems made it for you to do your work, take care of things at home, or get along with other people?:`,
-      //   choices: Q9,
-      // } ]);
-      // let Q10 = [
-      //   '1. Not at all',
-      //   '2. Several days',
-      //   '3. Over half the days',
-      //   '4. Nearly every day',
-      // ];
-      // const ans10 = await inquirer.prompt([{
-      //   type: 'list',
-      //   name: 'Question10',
-      //   message: `Over the last 2 weeks, how often have you been bothered by feeling nervous, anxious, or on edge?:`,
-      //   choices: Q10,
-      // } ]);
-      // let result = {...ans1, ...ans2, ...ans3, ...ans4, ...ans5, ...ans6, ...ans7, ...ans8, ...ans9, ...ans10 };
-      // let result = {...ans1, ...ans2, ...ans3, ...ans4, ...ans5};
-      // score = 3 + Q2.indexOf(result.Question2) + Q3.indexOf(result.Question3) + Q4.indexOf(result.Question4) + Q5.indexOf(result.Question5);
-      if (score < 5) {
-        status = 'good';
-        console.log('\n---------------------------\n score : ', score);
-        console.log(' status : ', status, '\n---------------------------\n');
+    // let Q6 = [
+    //   '1. I am not ready to change in the next 3 months',
+    //   '2. I am thinking about changing in the next 3 months',
+    //   '3. I am thinking about changing in the next month',
+    //   '4. I am ready to make a change today',
+    //   '5. I have already made some progress',
+    // ];
+    // const ans6 = await inquirer.prompt([{
+    //   type: 'list',
+    //   name: 'Question6',
+    //   message: `How ready are you to make a change in your life?:`,
+    //   choices: Q6,
+    // } ]);
+    // let Q7 = [
+    //   '1. Not at all',
+    //   '2. Several days',
+    //   '3. More than half the days',
+    //   '4. Nearly every day',
+    // ];
+    // const ans7 = await inquirer.prompt([{
+    //   type: 'list',
+    //   name: 'Question7',
+    //   message: `Over the last 2 weeks, how often have you been bothered by little interest or pleasure in doing things?:`,
+    //   choices: Q7,
+    // } ]);
+    // let Q8 = [
+    //   '1. Not at all',
+    //   '2. Several days',
+    //   '3. More than half the days',
+    //   '4. Nearly every day',
+    // ];
+    // const ans8 = await inquirer.prompt([{
+    //   type: 'list',
+    //   name: 'Question8',
+    //   message: `Over the last 2 weeks, how often have you been bothered by thoughts that you would be better off dead or of hurting yourself in some way?:`,
+    //   choices: Q8,
+    // } ]);
+    // let Q9 = [
+    //   '1. Not difficult at all',
+    //   '2. Somewhat difficult',
+    //   '3. Very difficult',
+    //   '4. Extremely difficult',
+    // ];
+    // const ans9 = await inquirer.prompt([{
+    //   type: 'list',
+    //   name: 'Question9',
+    //   message: `If you selected any problems, how difficult have these problems made it for you to do your work, take care of things at home, or get along with other people?:`,
+    //   choices: Q9,
+    // } ]);
+    // let Q10 = [
+    //   '1. Not at all',
+    //   '2. Several days',
+    //   '3. Over half the days',
+    //   '4. Nearly every day',
+    // ];
+    // const ans10 = await inquirer.prompt([{
+    //   type: 'list',
+    //   name: 'Question10',
+    //   message: `Over the last 2 weeks, how often have you been bothered by feeling nervous, anxious, or on edge?:`,
+    //   choices: Q10,
+    // } ]);
+    // let result = {...ans1, ...ans2, ...ans3, ...ans4, ...ans5, ...ans6, ...ans7, ...ans8, ...ans9, ...ans10 };
+    // let result = {...ans1, ...ans2, ...ans3, ...ans4, ...ans5};
+    // score = 3 + Q2.indexOf(result.Question2) + Q3.indexOf(result.Question3) + Q4.indexOf(result.Question4) + Q5.indexOf(result.Question5);
+
+    if (score < 5) {
+      status = 'good';
+      console.log('\n---------------------------\n score : ', score);
+      console.log(' status : ', status, '\n---------------------------\n');
         
-      } else if (score >= 5 && score <= 10) {
-        status = 'need help';
-        console.log('\n---------------------------\n score : ', score);
-        console.log(' status : ', status, '\n---------------------------\n');
+    } else if (score >= 5 && score <= 10) {
+      status = 'need help';
+      console.log('\n---------------------------\n score : ', score);
+      console.log(' status : ', status, '\n---------------------------\n');
         
-      } else if (score > 10) {
-        status = 'extreme help';
-        console.log('\n---------------------------\n score : ', score);
-        console.log(' status : ', status, '\n---------------------------\n');
+    } else if (score > 10) {
+      status = 'extreme help';
+      console.log('\n---------------------------\n score : ', score);
+      console.log(' status : ', status, '\n---------------------------\n');
         
-      }
+    }
     // })()
     //   .then((data) => {
-        let username = req.cookies['remember token'];
-        return jwt.verify(username, process.env.SECRET, async function (err, decoded) {
-          let decodedusername = decoded.user_name;
-          User.assmentcreate(decodedusername, status);
-          res.send({user_name:decodedusername})
-          // res.redirect('/home');
-        } );
-      // })
-      // .catch(console.error);
-    //a new page with a form to sign-in or sign-up and OAuth options (frontend)
+    let username = req.cookies['remember token'];
+    return jwt.verify(username, process.env.SECRET, async function (err, decoded) {
+      let decodedusername = decoded.user_name;
+      User.assmentcreate(decodedusername, status);
+      res.send({user_name:decodedusername});
+      // res.redirect('/home');
+    } );
+  }
+  // })
+  // .catch(console.error);
+  //a new page with a form to sign-in or sign-up and OAuth options (frontend)
   
   // else {
   //   res.redirect('/profile');
