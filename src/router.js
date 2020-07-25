@@ -37,76 +37,78 @@ router.delete('/talkitoverposts/:idpost', bearerMiddleware, deletepostsHandler);
  * return the status of the user
  */
 function registerHandler(req, res) {
+  let score = req.body;
+  var status;
   if (!req.user) {
-    var inquirer = require('inquirer');
-    var score = 0;
-    let Q1 = [
-      '1. Anxity',
-      '2. Chronic Pain',
-      '3. Breakups',
-      '4. Bipolar',
-      '5. Domestic Violence',
-      '6. Eating Disorders',
-      '7. Family Stress',
-      '8. Loneliness',
-      '9. Managing Emotions',
-    ];
-    (async() => {
-      const ans1 = await inquirer.prompt([{
-        type: 'list',
-        name: 'mentalissue',
-        message: 'Whats on your mind? Select an issue below that best describes the reason you are here:?',
-        default: 'Jake',
-        choices: Q1,
-      } ]);
-      let Q2 = [
-        `1. No Struggle`,
-        `2. Mild Struggle`,
-        `3. Moderate Struggle`,
-        `4. Significant Struggle`,
-      ];
-      const ans2 = await inquirer.prompt([{
-        type: 'list',
-        name: 'Question2',
-        message: `Dealing with ${ans1.mentalissue.split(' ').splice(1).join(' ')} causes me:`,
-        choices: Q2,
-      } ]);
-      let Q3 = [
-        '1. Never',
-        '2. Once in a While',
-        '3. Some of the Time',
-        '4. Frequently',
-      ];
-      const ans3 = await inquirer.prompt([{
-        type: 'list',
-        name: 'Question3',
-        message: `${ans1.mentalissue.split(' ').splice(1).join(' ')} impacts my work, school, or relationships:`,
-        choices: Q3,
-      } ]);
-      let Q4 = [
-        '1. Not Really Important',
-        '2. Somewhat Important',
-        '3. Important',
-        '4. Very Important',
-      ];
-      const ans4 = await inquirer.prompt([{
-        type: 'list',
-        name: 'Question4',
-        message: `Learning how to better manage ${ans1.mentalissue.split(' ').splice(1).join(' ')} is:`,
-        choices: Q4,
-      } ]);
-      let Q5 = [
-        '1. Id rather not answer at this time',
-        '2. Ive sought professional help one time in the past.',
-        '3. Ive sought professional help several times before this.',
-        '4. Ive sought professional help multiple times in the past.',
-      ];
-      const ans5 = await inquirer.prompt([{
-        type: 'list',
-        name: 'Question5',
-        message: `Have you ever sought or received professional help (therapy, counseling, self-help, group support, or medication) for ${ans1.mentalissue.split(' ').splice(1).join(' ')} is:`,
-        choices: Q5,
-      } ]);
+    // var inquirer = require('inquirer');
+    // var score = 0;
+    // let Q1 = [
+    //   '1. Anxity',
+    //   '2. Chronic Pain',
+    //   '3. Breakups',
+    //   '4. Bipolar',
+    //   '5. Domestic Violence',
+    //   '6. Eating Disorders',
+    //   '7. Family Stress',
+    //   '8. Loneliness',
+    //   '9. Managing Emotions',
+    // ];
+    // (async() => {
+    //   const ans1 = await inquirer.prompt([{
+    //     type: 'list',
+    //     name: 'mentalissue',
+    //     message: 'Whats on your mind? Select an issue below that best describes the reason you are here:?',
+    //     default: 'Jake',
+    //     choices: Q1,
+    //   } ]);
+    //   let Q2 = [
+    //     `1. No Struggle`,
+    //     `2. Mild Struggle`,
+    //     `3. Moderate Struggle`,
+    //     `4. Significant Struggle`,
+    //   ];
+    //   const ans2 = await inquirer.prompt([{
+    //     type: 'list',
+    //     name: 'Question2',
+    //     message: `Dealing with ${ans1.mentalissue.split(' ').splice(1).join(' ')} causes me:`,
+    //     choices: Q2,
+    //   } ]);
+    //   let Q3 = [
+    //     '1. Never',
+    //     '2. Once in a While',
+    //     '3. Some of the Time',
+    //     '4. Frequently',
+    //   ];
+    //   const ans3 = await inquirer.prompt([{
+    //     type: 'list',
+    //     name: 'Question3',
+    //     message: `${ans1.mentalissue.split(' ').splice(1).join(' ')} impacts my work, school, or relationships:`,
+    //     choices: Q3,
+    //   } ]);
+    //   let Q4 = [
+    //     '1. Not Really Important',
+    //     '2. Somewhat Important',
+    //     '3. Important',
+    //     '4. Very Important',
+    //   ];
+    //   const ans4 = await inquirer.prompt([{
+    //     type: 'list',
+    //     name: 'Question4',
+    //     message: `Learning how to better manage ${ans1.mentalissue.split(' ').splice(1).join(' ')} is:`,
+    //     choices: Q4,
+    //   } ]);
+    //   let Q5 = [
+    //     '1. Id rather not answer at this time',
+    //     '2. Ive sought professional help one time in the past.',
+    //     '3. Ive sought professional help several times before this.',
+    //     '4. Ive sought professional help multiple times in the past.',
+    //   ];
+    //   const ans5 = await inquirer.prompt([{
+    //     type: 'list',
+    //     name: 'Question5',
+    //     message: `Have you ever sought or received professional help (therapy, counseling, self-help, group support, or medication) for ${ans1.mentalissue.split(' ').splice(1).join(' ')} is:`,
+    //     choices: Q5,
+    //   } ]);
       // let Q6 = [
       //   '1. I am not ready to change in the next 3 months',
       //   '2. I am thinking about changing in the next 3 months',
@@ -168,40 +170,41 @@ function registerHandler(req, res) {
       //   message: `Over the last 2 weeks, how often have you been bothered by feeling nervous, anxious, or on edge?:`,
       //   choices: Q10,
       // } ]);
-      var status;
       // let result = {...ans1, ...ans2, ...ans3, ...ans4, ...ans5, ...ans6, ...ans7, ...ans8, ...ans9, ...ans10 };
-      let result = {...ans1, ...ans2, ...ans3, ...ans4, ...ans5};
-      score = 3 + Q2.indexOf(result.Question2) + Q3.indexOf(result.Question3) + Q4.indexOf(result.Question4) + Q5.indexOf(result.Question5);
+      // let result = {...ans1, ...ans2, ...ans3, ...ans4, ...ans5};
+      // score = 3 + Q2.indexOf(result.Question2) + Q3.indexOf(result.Question3) + Q4.indexOf(result.Question4) + Q5.indexOf(result.Question5);
       if (score < 5) {
         status = 'good';
         console.log('\n---------------------------\n score : ', score);
         console.log(' status : ', status, '\n---------------------------\n');
-        return status;
+        
       } else if (score >= 5 && score <= 10) {
         status = 'need help';
         console.log('\n---------------------------\n score : ', score);
         console.log(' status : ', status, '\n---------------------------\n');
-        return status;
+        
       } else if (score > 10) {
         status = 'extreme help';
         console.log('\n---------------------------\n score : ', score);
         console.log(' status : ', status, '\n---------------------------\n');
-        return status;
+        
       }
-    })()
-      .then((data) => {
+    // })()
+    //   .then((data) => {
         let username = req.cookies['remember token'];
         return jwt.verify(username, process.env.SECRET, async function (err, decoded) {
           let decodedusername = decoded.user_name;
-          User.assmentcreate(decodedusername, data);
-          res.redirect('/home');
+          User.assmentcreate(decodedusername, status);
+          res.send({user_name:decodedusername})
+          // res.redirect('/home');
         } );
-      })
-      .catch(console.error);
+      // })
+      // .catch(console.error);
     //a new page with a form to sign-in or sign-up and OAuth options (frontend)
-  } else {
-    res.redirect('/profile');
-  }
+  
+  // else {
+  //   res.redirect('/profile');
+  // }
 }
 
 
