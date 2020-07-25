@@ -37,7 +37,8 @@ router.delete('/talkitoverposts/:idpost', bearerMiddleware, deletepostsHandler);
  * return the status of the user
  */
 function registerHandler(req, res) {
-  let score = req.body;
+  let score = req.body.score;
+  // console.log('score ===> ',req.body);
   var status;
   if (!req.user) {
     // var inquirer = require('inquirer');
@@ -192,11 +193,11 @@ function registerHandler(req, res) {
     }
     // })()
     //   .then((data) => {
-    let username = req.cookies['remember token'];
+    let username = req.body.token;
     return jwt.verify(username, process.env.SECRET, async function (err, decoded) {
       let decodedusername = decoded.user_name;
       User.assmentcreate(decodedusername, status);
-      res.send({user_name:decodedusername});
+      res.send({user_name:decodedusername,status});
       // res.redirect('/home');
     } );
   }

@@ -31,8 +31,7 @@ class User {
     return await newUser.save(record);
   }
   async assmentcreate(username, data) {
-    return await userSchema.findOneAndUpdate({ user_name: username, status: data });
-
+    return await userSchema.findOneAndUpdate({ user_name: username, status: data }, { new: true });
   }
 
   async addReview(username, review) {
