@@ -67,13 +67,7 @@ describe('These Routs Be Accessed While The user Sign In', () => {
         expect(response.statusCode).toBe(500);
       });
   });
-  it('It /chatroom to response status error: 500', () => {
-    return mockRequest
-      .get('/chatroom')
-      .then((response) => {
-        expect(response.statusCode).toBe(500);
-      });
-  });
+
   it('It /addreview/username to response status error: 500', () => {
     return mockRequest
       .post('/addreview/username')
