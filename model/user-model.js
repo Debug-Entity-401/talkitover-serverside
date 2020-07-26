@@ -2,38 +2,38 @@
 const userSchema = require('./schema/user-schema');
 require('../model/schema/articlesschema');
 class User {
-    constructor(userSchema) {
-        this.schama = userSchema;
+  constructor(userSchema) {
+    this.schama = userSchema;
+  }
+  async readUser(record) {
+    if (record) {
+      let senc = await userSchema.find({ user_name: record });
+      return senc || null;
+    } else {
+      return await userSchema.find({});
     }
-    async readUser(record) {
-        if (record) {
-            let senc = await userSchema.find({ user_name: record });
-            return senc || null;
-        } else {
-            return await userSchema.find({});
-        }
-    }
+  }
 
-    /**
-     * 
-     * @param {string} record  function that wil return the acssess token
-     */
-    async read(record) {
-        if (record) { //add populate for join
-            let userRecord = await userSchema.findOne({ user_name: record }).populate('articles');
-            return userRecord || null;
-        } else { //add populate for join
-            return await userSchema.find({}).populate('articles');
-        }
+  /**
+ * 
+ * @param {string} record  function that wil return the acssess token
+ */
+  async read(record) {
+    if (record) { //add populate for join
+      let userRecord = await userSchema.findOne({ user_name: record }).populate('articles');
+      return userRecord || null;
+    } else { //add populate for join
+      return await userSchema.find({}).populate('articles');
     }
-    async create(record) {
-        let newUser = new userSchema(record);
-        return await newUser.save(record);
-    }
-    async assmentcreate(username, data) {
-        return await userSchema.findOneAndUpdate({ user_name: username, status: data });
+  }
+  async create(record) {
+    let newUser = new userSchema(record);
+    return await newUser.save(record);
+  }
+  async assmentcreate(username, data) {
+    return await userSchema.findOneAndUpdate({ user_name: username}, {status: data });
+  }
 
-    }
     async updateProfile(_id, Photo, country, email, phonNumber, user_name) {
         return await userSchema.findOneAndUpdate({ _id: _id, }, { $set: { photo: Photo, country: country, email: email, phonNumber: phonNumber } }, { new: true });
     }
@@ -55,5 +55,6 @@ class User {
         return await userSchema.findOneAndUpdate({ user_name: id1 }, { $pull: { articles: id2 } }, { new: true });
     }
 }
+
 ///
 module.exports = new User();
