@@ -221,20 +221,20 @@ function registerHandler(req, res) {
  */
 function homePageHandler(req, res) {
   const userInfo = req.user;
-  let status = 'new';
-  let newArticlesArray = [];
-  articles.read(status)
-    .then(newArticles => {
-      newArticles.forEach(article => {
-        let articleObj = {
-          title: article.title,
-          description: article.text,
-          url: article.url,
-        };
-        newArticlesArray.push(articleObj);
-      });
-      res.status(200).send(`**This is Homepage**\nWelcome, ${userInfo.user_name}!\n\nLatest Articles:\n${JSON.stringify(newArticlesArray)}`);
-    });
+  // let status = 'new';
+  // let newArticlesArray = [];
+  // articles.read(status)
+  //   .then(newArticles => {
+  //     newArticles.forEach(article => {
+  //       let articleObj = {
+  //         title: article.title,
+  //         description: article.text,
+  //         url: article.url,
+  //       };
+  //       newArticlesArray.push(articleObj);
+  //     });
+  //   });
+  res.status(200).send(userInfo.user_name);
 }
 
 /**

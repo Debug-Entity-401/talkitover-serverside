@@ -13,15 +13,15 @@ router.post('/signin', basicAuth, signinUser);
  * it will set the token in a cookie then redirect to the home page
  */
 function signinUser(req, res) {
-    let token = req.token;
+  let token = req.token;
 
-    let day = 86400000;
-    res.cookie('remember token', token, {
-        expires: new Date(Date.now() + day),
-        httpOnly: true,
-    });
-    res.send(token);
-    // res.status(201).send(token);
+  let day = 86400000;
+  res.cookie('remember token', token, {
+    expires: new Date(Date.now() + day),
+    httpOnly: true,
+  });
+  res.send(token);
+  // res.status(201).send(token);
 }
 
 module.exports = router;
