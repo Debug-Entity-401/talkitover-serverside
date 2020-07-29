@@ -180,32 +180,32 @@ function registerHandler(req, res) {
       status = 'good';
       console.log('\n---------------------------\n score : ', score);
       console.log(' status : ', status, '\n---------------------------\n');
-        
+
     } else if (score >= 5 && score <= 10) {
       status = 'need help';
       console.log('\n---------------------------\n score : ', score);
       console.log(' status : ', status, '\n---------------------------\n');
-        
+
     } else if (score > 10) {
       status = 'extreme help';
       console.log('\n---------------------------\n score : ', score);
       console.log(' status : ', status, '\n---------------------------\n');
-        
+
     }
     // })()
     //   .then((data) => {
     let username = req.body.token;
-    return jwt.verify(username, process.env.SECRET, async function (err, decoded) {
+    return jwt.verify(username, process.env.SECRET, async function(err, decoded) {
       let decodedusername = decoded.user_name;
       User.assmentcreate(decodedusername, status);
-      res.send({user_name:decodedusername,status});
+      res.send({ user_name: decodedusername, status });
       // res.redirect('/home');
-    } );
+    });
   }
   // })
   // .catch(console.error);
   //a new page with a form to sign-in or sign-up and OAuth options (frontend)
-  
+
   // else {
   //   res.redirect('/profile');
   // }
@@ -376,8 +376,9 @@ function otherUserProfileHandler(req, res) {
           email: otherUser.email,
           country: otherUser.country,
           reviews: otherUser.reviews,
+          id: otherUser._id
         };
-        res.status(200).send(`Welcome to ${otherUser.user_name}'s Profile!\nUser Info:\n${JSON.stringify(otherUserInfo)}`);
+        res.status(200).send(JSON.stringify(otherUserInfo));
       } else {
         req.user.capabilities = ['READ', 'CREATE'];
         res.redirect('/profile');
