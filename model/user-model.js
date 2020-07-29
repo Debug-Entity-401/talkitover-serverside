@@ -34,26 +34,26 @@ class User {
     return await userSchema.findOneAndUpdate({ user_name: username}, {status: data });
   }
 
-    async updateProfile(_id, Photo, country, email, phonNumber, user_name) {
-        return await userSchema.findOneAndUpdate({ _id: _id, }, { $set: { photo: Photo, country: country, email: email, phonNumber: phonNumber } }, { new: true });
-    }
-    async addReview(username, review) {
-        return await userSchema.findOneAndUpdate({ user_name: username }, { $push: { reviews: review } }, { new: true });
-    }
+  async updateProfile(_id, Photo, country, email, phonNumber, user_name) {
+    return await userSchema.findOneAndUpdate({ _id: _id }, { $set: { photo: Photo, country: country, email: email, phonNumber: phonNumber } }, { new: true });
+  }
+  async addReview(username, review) {
+    return await userSchema.findOneAndUpdate({ user_name: username }, { $push: { reviews: review } }, { new: true });
+  }
 
-    async deleteReview(username, id) {
-            return userSchema.findOne({ user_name: username }, { reviews: { $elemMatch: { _id: id } } })
-                .then(async record => {
-                    return await userSchema.findOneAndUpdate({ user_name: username }, { $pull: { reviews: record.reviews[0] } }, { new: true });
-                });
-        }
-        //add two functions
-    async articleByUser(id1, id2) {
-        return await userSchema.findOneAndUpdate({ user_name: id1 }, { $push: { articles: id2 } }, { new: true });
-    }
-    async deleteArticle(id1, id2) {
-        return await userSchema.findOneAndUpdate({ user_name: id1 }, { $pull: { articles: id2 } }, { new: true });
-    }
+  async deleteReview(username, id) {
+    return userSchema.findOne({ user_name: username }, { reviews: { $elemMatch: { _id: id } } })
+      .then(async record => {
+        return await userSchema.findOneAndUpdate({ user_name: username }, { $pull: { reviews: record.reviews[0] } }, { new: true });
+      });
+  }
+  //add two functions
+  async articleByUser(id1, id2) {
+    return await userSchema.findOneAndUpdate({ user_name: id1 }, { $push: { articles: id2 } }, { new: true });
+  }
+  async deleteArticle(id1, id2) {
+    return await userSchema.findOneAndUpdate({ user_name: id1 }, { $pull: { articles: id2 } }, { new: true });
+  }
 }
 
 ///
