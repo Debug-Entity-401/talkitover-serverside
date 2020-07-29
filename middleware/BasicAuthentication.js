@@ -8,7 +8,8 @@ const users = require('../src/users');
 
 module.exports = (req, res, next) => {
   if (!req.headers.authorization) {
-    next('Invalid Login');
+    // next('Invalid Login');
+    res.send('Invalid Login');
   } else {
     const basic = req.headers.authorization.split(' ').pop();
     const [user, pass] = base64.decode(basic).split(':');
@@ -17,7 +18,8 @@ module.exports = (req, res, next) => {
         req.token = users.getToken(validator);
         next();
       }).catch(err => {
-        next('You must sign up');
+        // next('You must sign up');
+        res.send('Invalid Login');
       });
   }
 };
