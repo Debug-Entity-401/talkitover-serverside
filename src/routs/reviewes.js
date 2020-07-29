@@ -27,7 +27,7 @@ function addReviewHandler(req, res) {
         newReview.date = current_date;
         userModel.addReview(reviewdUser, newReview)
             .then(review => {
-                res.redirect(`/otherprofile/${reviewdUser}`);
+                //       res.redirect(`/otherprofile/${reviewdUser}`);
             });
     } else {
         res.send('You cannot review yourself..');
