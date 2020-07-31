@@ -398,7 +398,8 @@ function addArticleUser(req, res) {
   let id2 = req.params.idarticle;
   User.articleByUser(id1, id2)
     .then(data => {
-      res.redirect('/profile');
+      res.send(`Article ${id2} is Saved`);
+      // res.redirect('/profile');
     });
 }
 
