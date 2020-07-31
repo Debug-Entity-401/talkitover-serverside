@@ -376,7 +376,7 @@ function otherUserProfileHandler(req, res) {
           email: otherUser.email,
           country: otherUser.country,
           reviews: otherUser.reviews,
-          id: otherUser._id
+          id: otherUser._id,
         };
         res.status(200).send(JSON.stringify(otherUserInfo));
       } else {
