@@ -14,7 +14,7 @@ const user = mongoose.Schema({
     reviews: [{
         reviewer_name: { type: String, default: 'Anonymous' },
         date: { type: Date, required: true },
-        rating: { type: String, enum: ['1 star', '2 stars', '3 stars', '4 stars', '5 stars'], required: true },
+        rating: { type: Number, enum: [1, 2, 3, 4, 5], required: true },
         review_description: { type: String, required: false },
     }],
     role: { type: String },

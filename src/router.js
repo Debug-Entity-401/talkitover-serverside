@@ -220,21 +220,21 @@ function registerHandler(req, res) {
  * send a welcome message to the user 
  */
 function homePageHandler(req, res) {
-  const userInfo = req.user;
-  // let status = 'new';
-  // let newArticlesArray = [];
-  // articles.read(status)
-  //   .then(newArticles => {
-  //     newArticles.forEach(article => {
-  //       let articleObj = {
-  //         title: article.title,
-  //         description: article.text,
-  //         url: article.url,
-  //       };
-  //       newArticlesArray.push(articleObj);
-  //     });
-  //   });
-  res.status(200).send(userInfo.user_name);
+    const userInfo = req.user;
+    // let status = 'new';
+    // let newArticlesArray = [];
+    // articles.read(status)
+    //   .then(newArticles => {
+    //     newArticles.forEach(article => {
+    //       let articleObj = {
+    //         title: article.title,
+    //         description: article.text,
+    //         url: article.url,
+    //       };
+    //       newArticlesArray.push(articleObj);
+    //     });
+    //   });
+    res.status(200).send(userInfo.user_name);
 }
 
 /**
@@ -246,35 +246,37 @@ function homePageHandler(req, res) {
  */
 
 async function profilePageHandler(req, res) {
-  //todo: show user's info in the profile page, including the articles and reviews (virtual joins)
-  const user = await req.user;
-  const username = await user.user_name;
-  await User.read(username)
-    .then(data => {
-      let userInfo = {
-        username: data.user_name,
-        photo: data.photo,
-        email: data.email,
-        country: data.country,
-        reviews: data.reviews,
-        articles: data.articles,
-        id: data._id,
-      };
-      //     res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
-      res.status(200).send(JSON.stringify(userInfo));
-    });
+    //todo: show user's info in the profile page, including the articles and reviews (virtual joins)
+    const user = await req.user;
+    const username = await user.user_name;
+    await User.read(username)
+        .then(data => {
+            let userInfo = {
+                username: data.user_name,
+                photo: data.photo,
+                email: data.email,
+                country: data.country,
+                role: data.role,
+                status: data.status,
+                reviews: data.reviews,
+                articles: data.articles,
+                id: data._id,
+            };
+            //     res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
+            res.status(200).send(JSON.stringify(userInfo));
+        });
 }
 async function editProfilePageHandler(req, res) {
-  let id = req.params.id;
-  let Photo = await req.body.photo;
-  let country = await req.body.country;
-  let email = await req.body.email;
-  let phonNumber = await req.body.phonNumber;
-  let user_name = await req.body.user_name;
-  await User.updateProfile(id, Photo, country, email, phonNumber, user_name)
-    .then(data => {
-      res.status(200).json(data);
-    });
+    let id = req.params.id;
+    let Photo = await req.body.photo;
+    let country = await req.body.country;
+    let email = await req.body.email;
+    let phonNumber = await req.body.phonNumber;
+    let user_name = await req.body.user_name;
+    await User.updateProfile(id, Photo, country, email, phonNumber, user_name)
+        .then(data => {
+            res.status(200).json(data);
+        });
 }
 /**
  * 
@@ -282,10 +284,10 @@ async function editProfilePageHandler(req, res) {
  *it will return all the posts 
  */
 function postsHandler(req, res) {
-  postmodule.read()
-    .then(data => {
-      res.status(200).json(data);
-    });
+    postmodule.read()
+        .then(data => {
+            res.status(200).json(data);
+        });
 }
 /**
  * 
@@ -295,14 +297,14 @@ function postsHandler(req, res) {
  * it will return the created post
  */
 function addpostsHandler(req, res) {
-  let newpost = req.body;
-  const date = new Date(Date.now());
-  let current_date = date.toDateString();
-  newpost.date = current_date;
-  postmodule.create(newpost)
-    .then(data => {
-      res.status(201).json(data);
-    });
+    let newpost = req.body;
+    const date = new Date(Date.now());
+    let current_date = date.toDateString();
+    newpost.date = current_date;
+    postmodule.create(newpost)
+        .then(data => {
+            res.status(201).json(data);
+        });
 }
 /**
  * 
@@ -312,23 +314,23 @@ function addpostsHandler(req, res) {
  * it will send the updated post
  */
 function editpostsHandler(req, res) {
-  let username = req.user.user_name;
-  let idpost = req.params.idpost;
-  let newpost = req.body;
-  User.read(username)
-    .then(data => {
-      postmodule.readById(idpost)
-        .then(postdata => {
-          if (postdata[0].user_name === data.user_name) {
-            postmodule.update(idpost, newpost)
-              .then(data => {
-                res.json(data);
-              });
-          } else {
-            res.send('you connot update the post');
-          }
+    let username = req.user.user_name;
+    let idpost = req.params.idpost;
+    let newpost = req.body;
+    User.read(username)
+        .then(data => {
+            postmodule.readById(idpost)
+                .then(postdata => {
+                    if (postdata[0].user_name === data.user_name) {
+                        postmodule.update(idpost, newpost)
+                            .then(data => {
+                                res.json(data);
+                            });
+                    } else {
+                        res.send('you connot update the post');
+                    }
+                });
         });
-    });
 }
 /**
  * 
@@ -338,22 +340,22 @@ function editpostsHandler(req, res) {
  * it will return a message if the post is deleted
  */
 function deletepostsHandler(req, res) {
-  let username = req.user.user_name;
-  let idpost = req.params.idpost;
-  User.read(username)
-    .then(data => {
-      postmodule.readById(idpost)
-        .then(postdata => {
-          if (data.role === 'Administrators' || postdata[0].user_name === data.user_name) {
-            postmodule.delete(idpost)
-              .then(data => {
-                res.send('post deleted');
-              });
-          } else {
-            res.send('you connot delete');
-          }
+    let username = req.user.user_name;
+    let idpost = req.params.idpost;
+    User.read(username)
+        .then(data => {
+            postmodule.readById(idpost)
+                .then(postdata => {
+                    if (data.role === 'Administrators' || postdata[0].user_name === data.user_name) {
+                        postmodule.delete(idpost)
+                            .then(data => {
+                                res.send('post deleted');
+                            });
+                    } else {
+                        res.send('you connot delete');
+                    }
+                });
         });
-    });
 }
 
 
@@ -369,19 +371,21 @@ function otherUserProfileHandler(req, res) {
     let username = req.params.username;
     User.read(username)
         .then(otherUser => {
-            if (otherUser.user_name !== req.user.user_name) {
+            if (otherUser && otherUser.user_name !== req.user.user_name) {
                 let otherUserInfo = {
                     username: otherUser.user_name,
                     photo: otherUser.photo,
                     email: otherUser.email,
                     country: otherUser.country,
                     reviews: otherUser.reviews,
-                    id: otherUser._id
+                    role: otherUser.role,
+                    status: otherUser.status,
+                    id: otherUser._id,
                 };
                 res.status(200).send(JSON.stringify(otherUserInfo));
             } else {
                 req.user.capabilities = ['READ', 'CREATE'];
-                res.redirect('/profile');
+                //       res.redirect('/profile');
             }
         });
 }
@@ -394,12 +398,12 @@ function otherUserProfileHandler(req, res) {
  * it will redirect to the profile page
  */
 function addArticleUser(req, res) {
-  let id1 = req.user.user_name;
-  let id2 = req.params.idarticle;
-  User.articleByUser(id1, id2)
-    .then(data => {
-      res.redirect('/profile');
-    });
+    let id1 = req.user.user_name;
+    let id2 = req.params.idarticle;
+    User.articleByUser(id1, id2)
+        .then(data => {
+            res.redirect('/profile');
+        });
 }
 
 
@@ -413,11 +417,11 @@ function addArticleUser(req, res) {
 
 
 function readOne(req, res) {
-  let userName = req.user.user_name;
-  User.read(userName)
-    .then(data => {
-      res.json(data);
-    });
+    let userName = req.user.user_name;
+    User.read(userName)
+        .then(data => {
+            res.json(data);
+        });
 }
 /**
  * 
@@ -428,11 +432,11 @@ function readOne(req, res) {
  */
 
 function deleteArticles(req, res) {
-  let id1 = req.user.user_name;
-  let id2 = req.params.idarticle;
-  User.deleteArticle(id1, id2)
-    .then(data => {
-      res.redirect('/profile');
-    });
+    let id1 = req.user.user_name;
+    let id2 = req.params.idarticle;
+    User.deleteArticle(id1, id2)
+        .then(data => {
+            res.redirect('/profile');
+        });
 }
 module.exports = router;
