@@ -22,6 +22,7 @@ function addReviewHandler(req, res) {
     let current_date = date.toDateString();
     const reviewdUser = req.params.username;
     const reviewer = req.user.user_name;
+    console.log(reviewdUser, '/////////////////', reviewer);
     if (reviewdUser !== reviewer) {
         let newReview = req.body;
         newReview.date = current_date;
