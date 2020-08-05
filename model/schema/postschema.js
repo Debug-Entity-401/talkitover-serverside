@@ -8,6 +8,7 @@ const posts = mongoose.Schema({
   availability:{type:String,required:true},
   date:{type:String,required:true},
   description:{type:String,required:true},
+  solved:{type:Boolean},
 });
 
 module.exports = mongoose.model('posts',posts);

@@ -44,6 +44,7 @@ class Model{
   readById(id){
     return this.schema.find({_id: id}); 
   }
+  
 }
 
 module.exports = Model;
