@@ -27,7 +27,7 @@
     "homepage": "https://github.com/talkitover/talkitover#readme",
     "dependencies": {
         "@code-fellows/supergoose": "^1.0.2",
-        "axios": "^0.19.2",
+        "axios": "^0.21.1",
         "base-64": "^0.1.0",
         "bcrypt": "^5.0.0",
         "cookie-parser": "^1.4.5",
